@@ -72,6 +72,50 @@ The script will create a `.project_config` file in your project root with the ne
 
 Testing on WSL is currently incomplete. In principle, the Linux installation instructions should work for WSL environments. If you encounter any issues while installing or running Basilisk on WSL, please report them by opening an issue on GitHub.
 
+## Reporting Issues and Feature Requests
+
+We use GitHub Issues to track bugs, feature requests, and example requests for this course. When creating an issue, please select the appropriate template to help us address your needs efficiently.
+
+### Issue Templates
+
+We provide the following templates for different types of issues:
+
+#### Bug Report Template
+Use this template when you encounter problems with installation, compilation, or running Basilisk code. Include:
+- Detailed description of the issue
+- Your environment (OS, compiler version)
+- Steps to reproduce
+- Expected vs. actual behavior
+- Error messages and logs
+- Code snippets or files that demonstrate the issue
+
+#### Feature/Topic Request Template
+Use this when you'd like to request:
+- Coverage of specific topics in the course
+- New examples or tutorials
+- Additional functionality in the codebase
+- Improvements to existing materials
+
+#### Example Request Template
+Use this template when requesting specific examples that demonstrate:
+- Particular Basilisk features
+- Solutions to common problems
+- Implementation of specific physics or numerical methods
+
+#### General Question Template
+For any questions about Basilisk usage, the course material, or computational fluid dynamics concepts that aren't covered by the other templates.
+
+### How to Create an Issue
+
+1. Go to the "Issues" tab in the GitHub repository
+2. Click the "New Issue" button
+3. Select the appropriate template from the options
+4. Fill in the required information according to the template
+5. Add relevant labels if available
+6. Submit the issue
+
+Please provide as much relevant information as possible to help us understand and address your issue efficiently.
+
 ## Complete installation instructions
 For complete installation instructions, including:
 - Configuration for different systems
