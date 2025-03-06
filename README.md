@@ -68,6 +68,10 @@ source .project_config
 
 The script will create a `.project_config` file in your project root with the necessary environment variables. This approach avoids modifying your global shell configuration and keeps the Basilisk installation contained within your project.
 
+## Windows Subsystem for Linux (WSL) Compatibility
+
+Testing on WSL is currently incomplete. In principle, the Linux installation instructions should work for WSL environments. If you encounter any issues while installing or running Basilisk on WSL, please report them by opening an issue on GitHub.
+
 ## Complete installation instructions
 For complete installation instructions, including:
 - Configuration for different systems
