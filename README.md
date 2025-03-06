@@ -11,7 +11,13 @@ Basilisk requires a C99-compliant compiler and GNU make. Installation can be don
 sudo apt install darcs make gawk
 darcs clone http://basilisk.fr/basilisk
 cd basilisk/src
+
+# For Linux/Ubuntu users (preferred mode of operation)
 ln -s config.gcc config
+
+# For Mac users
+# ln -s config.osx config
+
 make
 ```
 
@@ -20,7 +26,13 @@ make
 wget http://basilisk.fr/basilisk/basilisk.tar.gz
 tar xzf basilisk.tar.gz
 cd basilisk/src
+
+# For Linux/Ubuntu users (preferred mode of operation)
 ln -s config.gcc config
+
+# For Mac users
+# ln -s config.osx config
+
 make
 ```
 ### Add to your shell configuration (.bashrc or .zshrc)
@@ -39,7 +51,7 @@ echo 'export PATH=$PATH:$BASILISK' >> ~/.zshrc
 For project-specific installations, you can use the provided `reset_install_requirements.sh` script which:
 - Installs Basilisk within your project directory
 - Sets up environment variables locally (in `.project_config`)
-- Automatically detects your OS (MacOS or Linux) and uses appropriate configuration
+- Automatically detects your OS (MacOS or Linux) and uses appropriate configuration (config.osx for Mac, config.gcc for Linux)
 - Verifies the installation
 
 ### Basic usage:
