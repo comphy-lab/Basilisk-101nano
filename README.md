@@ -70,7 +70,7 @@ The script will create a `.project_config` file in your project root with the ne
 
 ## Windows Subsystem for Linux (WSL) Compatibility
 
-Testing on WSL is currently incomplete. In principle, the Linux installation instructions should work for WSL environments. If you encounter any issues while installing or running Basilisk on WSL, please report them by opening an issue on GitHub.
+Testing on WSL is currently incomplete. In principle, the Linux installation instructions should work for WSL environments. If you encounter any issues while installing or running Basilisk on WSL, please report them by [opening a bug report](https://github.com/USERNAME/REPOSITORY/issues/new?template=bug_report.md&labels=bug,wsl).
 
 ## Reporting Issues and Feature Requests
 
@@ -80,7 +80,7 @@ We use GitHub Issues to track bugs, feature requests, and example requests for t
 
 We provide the following templates for different types of issues:
 
-#### Bug Report Template
+#### [Bug Report Template](https://github.com/USERNAME/REPOSITORY/issues/new?template=bug_report.md)
 Use this template when you encounter problems with installation, compilation, or running Basilisk code. Include:
 - Detailed description of the issue
 - Your environment (OS, compiler version)
@@ -89,30 +89,37 @@ Use this template when you encounter problems with installation, compilation, or
 - Error messages and logs
 - Code snippets or files that demonstrate the issue
 
-#### Feature/Topic Request Template
+#### [Feature/Topic Request Template](https://github.com/USERNAME/REPOSITORY/issues/new?template=feature_request.md)
 Use this when you'd like to request:
 - Coverage of specific topics in the course
 - New examples or tutorials
 - Additional functionality in the codebase
 - Improvements to existing materials
 
-#### Example Request Template
+#### [Example Request Template](https://github.com/USERNAME/REPOSITORY/issues/new?template=example_request.md)
 Use this template when requesting specific examples that demonstrate:
 - Particular Basilisk features
 - Solutions to common problems
 - Implementation of specific physics or numerical methods
 
-#### General Question Template
+#### [General Question Template](https://github.com/USERNAME/REPOSITORY/issues/new?template=general_question.md)
 For any questions about Basilisk usage, the course material, or computational fluid dynamics concepts that aren't covered by the other templates.
 
 ### How to Create an Issue
 
-1. Go to the "Issues" tab in the GitHub repository
-2. Click the "New Issue" button
+1. Go to the ["Issues" tab](https://github.com/USERNAME/REPOSITORY/issues) in the GitHub repository
+2. Click the ["New Issue"](https://github.com/USERNAME/REPOSITORY/issues/new/choose) button
 3. Select the appropriate template from the options
 4. Fill in the required information according to the template
 5. Add relevant labels if available
 6. Submit the issue
+
+You can also create issues directly using these links:
+- [Report a bug](https://github.com/USERNAME/REPOSITORY/issues/new?template=bug_report.md)
+- [Request a feature or topic](https://github.com/USERNAME/REPOSITORY/issues/new?template=feature_request.md)
+- [Request an example](https://github.com/USERNAME/REPOSITORY/issues/new?template=example_request.md)
+- [Ask a question](https://github.com/USERNAME/REPOSITORY/issues/new?template=general_question.md)
+- [Submit another type of issue](https://github.com/USERNAME/REPOSITORY/issues/new?template=blank_issue.md)
 
 Please provide as much relevant information as possible to help us understand and address your issue efficiently.
 
