@@ -87,6 +87,11 @@ deps/
 **/*.bv
 **/*.png
 
+# some ai files
+**/CLAUDE.md
+**/.windsurfrules
+**/.cursorrules
+
 # Custom executables
 filamentsVE
 filamentsNewt
