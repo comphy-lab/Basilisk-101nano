@@ -1,3 +1,17 @@
+# OS generated files
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE/Editor folders
+.vscode/
+.idea/
+*.swp
+*~
+
 # Prerequisites
 *.d
 
@@ -22,7 +36,7 @@
 *.la
 *.lo
 
-# Shared objects (inc. Windows DLLs)
+# Shared objects
 *.dll
 *.so
 *.so.*
@@ -50,3 +64,40 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Build and dependency directories
+build/
+bin/
+obj/
+deps/
+
+# Project specific files
+**/_darcs
+**/*.html
+**/intermediate*
+**/log*.dat
+**/restart*
+**/*.tags*
+**/*.deps
+**/*.tests
+**/*.s*
+**/Video
+**/*.mp4
+**/*.json
+**/*.bv
+**/*.png
+
+# Custom executables
+filamentsVE
+filamentsNewt
+filament_initialCondition
+filament_initialCondition_3D
+getFacet
+getData-elastic-scalar
+pinchOff
+getview3D
+
+# Never exclude these files
+!*.c
+!*.h
+!*.sbatch

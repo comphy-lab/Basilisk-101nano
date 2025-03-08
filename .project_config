@@ -1,0 +1,2 @@
+export BASILISK=/Users/vatsal/Library/CloudStorage/Dropbox/1-Teaching/Basilisk course/Basilisk-101/basilisk/src
+export PATH=$PATH:$BASILISK
