@@ -1,20 +1,54 @@
-# Basilisk-101
+# Basilisk-101: High-Fidelity Simulations Using Basilisk C
 
 [![Issues](https://img.shields.io/github/issues/comphy-lab/Basilisk-101)](https://github.com/comphy-lab/Basilisk-101/issues)
 [![License](https://img.shields.io/github/license/comphy-lab/Basilisk-101)](https://github.com/comphy-lab/Basilisk-101/blob/main/LICENSE)
 [![Last Commit](https://img.shields.io/github/last-commit/comphy-lab/Basilisk-101)](https://github.com/comphy-lab/Basilisk-101/commits/main)
-[![Course](https://img.shields.io/badge/Course-March%202025-blue)](https://comphy-lab.org/teaching/basilisk-101)
+[![Course](https://img.shields.io/badge/Course-March%202025-blue)](https://comphy-lab.org/teaching/2025-Basilisk101-Madrid)
 [![Basilisk](https://img.shields.io/badge/Basilisk-Compatible-green)](http://basilisk.fr/)
 
-A course on high-fidelity simulations using Basilisk C for computational fluid dynamics.
+Repository for the Basilisk C course at Universidad Carlos III de Madrid (March 10-13, 2025).
+
+## Course Description
+
+This intensive course provides a comprehensive introduction to high-fidelity simulations using Basilisk C, a powerful computational framework for fluid dynamics. Participants will learn to implement and solve complex fluid mechanics problems with an emphasis on multiphase flows, interface dynamics, and non-Newtonian rheology.
+
+### What You'll Learn
+
+- **Think before you compute!** Understanding the physics before implementation
+- **Writing the first code in Basilisk C** Getting comfortable with the framework
+- **Solving conservation equations** Numerical approaches to fluid dynamics
+- **Interface tracking methods** Capturing multiphase phenomena accurately
+- **Non-Newtonian flows** Modeling complex rheological behaviors
+
+### Course Details
+
+- **Dates**: March 10-13, 2025
+- **Location**: Universidad Carlos III de Madrid, Spain
+- **Duration**: 4 days, full-time
+- **Prerequisites**:
+  - Basic knowledge of fluid mechanics
+  - Experience with programming (any language, C preferred)
+  - Understanding of partial differential equations
+  - Laptop with ability to compile C code
+
+For complete course schedule and registration information, visit: [Course Website](https://comphy-lab.org/teaching/2025-Basilisk101-Madrid)
+
+## Repository Structure
+
+```
+├-- basilisk/src/: Core Basilisk CFD library (reference only)
+├── postProcess/: Project-specific post-processing tools
+├── src-local/: Custom header files extending Basilisk functionality
+├── testCases/: Test cases with their own Makefile
+```
 
 ## Installation
 
 Basilisk requires a C99-compliant compiler and GNU make. Installation can be done in two ways:
 
-## Global installation
+### Global Installation
 
-### Using darcs (recommended)
+#### Using darcs (recommended)
 ```bash
 sudo apt install darcs make gawk
 darcs clone http://basilisk.fr/basilisk
@@ -29,7 +63,7 @@ ln -s config.gcc config
 make
 ```
 
-### Using a tarball
+#### Using a tarball
 ```bash
 wget http://basilisk.fr/basilisk/basilisk.tar.gz
 tar xzf basilisk.tar.gz
@@ -44,7 +78,7 @@ ln -s config.gcc config
 make
 ```
 
-### Add to your shell configuration (.bashrc or .zshrc)
+#### Add to your shell configuration (.bashrc or .zshrc)
 ```bash
 echo "export BASILISK=$PWD" >> ~/.bashrc
 echo 'export PATH=$PATH:$BASILISK' >> ~/.bashrc
@@ -55,15 +89,15 @@ echo "export BASILISK=$PWD" >> ~/.zshrc
 echo 'export PATH=$PATH:$BASILISK' >> ~/.zshrc
 ```
 
-## Repository level installation
+### Repository Level Installation
 
 For project-specific installations, you can use the provided `reset_install_requirements.sh` script which:
 - Installs Basilisk within your project directory
 - Sets up environment variables locally (in `.project_config`)
-- Automatically detects your OS (MacOS or Linux) and uses appropriate configuration (config.osx for Mac, config.gcc for Linux)
+- Automatically detects your OS (MacOS or Linux) and uses appropriate configuration
 - Verifies the installation
 
-### Basic usage:
+#### Basic usage:
 ```bash
 # Run the script to install or use existing installation
 ./reset_install_requirements.sh
@@ -77,9 +111,13 @@ source .project_config
 
 The script will create a `.project_config` file in your project root with the necessary environment variables. This approach avoids modifying your global shell configuration and keeps the Basilisk installation contained within your project.
 
-## Windows Subsystem for Linux (WSL) Compatibility
+### Windows Subsystem for Linux (WSL) Compatibility
 
 Testing on WSL is currently incomplete. In principle, the Linux installation instructions should work for WSL environments. If you encounter any issues while installing or running Basilisk on WSL, please report them by [opening a bug report](https://github.com/comphy-lab/Basilisk-101/issues/new?template=bug_report.md&labels=bug,wsl).
+
+### Complete Installation Instructions
+
+For more detailed installation instructions, including configuration for different systems, setting up environment variables, installing additional dependencies, and optional libraries, please refer to the official installation guide at [http://basilisk.fr/src/INSTALL](http://basilisk.fr/src/INSTALL).
 
 ## Reporting Issues and Feature Requests
 
@@ -87,10 +125,11 @@ We use GitHub Issues to track bugs, feature requests, and example requests for t
 
 ### Issue Templates
 
-We provide the following templates for different types of issues:
+#### Bug Report:
+[Report here](https://github.com/comphy-lab/Basilisk-101/issues/new?template=bug_report.md)
 
-#### [Bug Report Template](https://github.com/comphy-lab/Basilisk-101/issues/new?template=bug_report.md)
-Use this template when you encounter problems with installation, compilation, or running Basilisk code. Include:
+- For problems with installation, compilation, or running code. 
+Please include:
 - Detailed description of the issue
 - Your environment (OS, compiler version)
 - Steps to reproduce
@@ -98,21 +137,24 @@ Use this template when you encounter problems with installation, compilation, or
 - Error messages and logs
 - Code snippets or files that demonstrate the issue
 
-#### [Feature/Topic Request Template](https://github.com/comphy-lab/Basilisk-101/issues/new?template=feature_request.md)
-Use this when you'd like to request:
+#### Feature/Topic Request:
+[Report here](https://github.com/comphy-lab/Basilisk-101/issues/new?template=feature_request.md)
+- For requesting specific topics or functionality
 - Coverage of specific topics in the course
 - New examples or tutorials
 - Additional functionality in the codebase
 - Improvements to existing materials
 
-#### [Example Request Template](https://github.com/comphy-lab/Basilisk-101/issues/new?template=example_request.md)
-Use this template when requesting specific examples that demonstrate:
+#### Example Request:
+[Report here](https://github.com/comphy-lab/Basilisk-101/issues/new?template=example_request.md)
+- For requesting specific examples that demonstrate:
 - Particular Basilisk features
 - Solutions to common problems
 - Implementation of specific physics or numerical methods
 
-#### [General Question Template](https://github.com/comphy-lab/Basilisk-101/issues/new?template=general_question.md)
-For any questions about Basilisk usage, the course material, or computational fluid dynamics concepts that aren't covered by the other templates.
+#### General Question:
+[Report here](https://github.com/comphy-lab/Basilisk-101/issues/new?template=general_question.md)
+- For any other questions
 
 ### How to Create an Issue
 
@@ -122,22 +164,3 @@ For any questions about Basilisk usage, the course material, or computational fl
 4. Fill in the required information according to the template
 5. Add relevant labels if available
 6. Submit the issue
-
-You can also create issues directly using these links:
-- [Report a bug](https://github.com/comphy-lab/Basilisk-101/issues/new?template=bug_report.md)
-- [Request a feature or topic](https://github.com/comphy-lab/Basilisk-101/issues/new?template=feature_request.md)
-- [Request an example](https://github.com/comphy-lab/Basilisk-101/issues/new?template=example_request.md)
-- [Ask a question](https://github.com/comphy-lab/Basilisk-101/issues/new?template=general_question.md)
-- [Submit another type of issue](https://github.com/comphy-lab/Basilisk-101/issues/new?template=blank_issue.md)
-
-Please provide as much relevant information as possible to help us understand and address your issue efficiently.
-
-## Complete installation instructions
-For complete installation instructions, including:
-- Configuration for different systems
-- Setting up environment variables
-- Installing additional dependencies
-- Optional libraries
-
-Please refer to the official installation guide at:
-[http://basilisk.fr/src/INSTALL](http://basilisk.fr/src/INSTALL)
