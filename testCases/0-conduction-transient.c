@@ -12,7 +12,11 @@
  * \frac{\partial T}{\partial t} = \frac{\partial^2 T}{\partial x^2}
  * 
  * Subject to no-flux boundary conditions on both ends of the domain.
- * The initial condition is a thin rectangular temperature profile centered at x=0.
+ * Initial condition is a "Dirac delta" approximated by a thin rectangle
+ * centered at x=0 with total integral = 1.
+ * 
+ * The exact self-similar analytical solution is:
+ * T(x,t) = \frac{1}{2\sqrt{\pi t}}e^{-x^2/4t}
  */
 
 int main() {
@@ -24,11 +28,11 @@ int main() {
     const double eps  = 0.1;          // Half-width of the initial "rectangle"
     
     // Time-stepping control (explicit)
-    // Stability condition for 1D heat eq. (diffusivity alpha=1): dt <= dx^2/2
-    double dt        = 0.5 * dx*dx;  
-    double tmax      = 1.0;           // Final time
-    double tprint    = 0.1;           // Print interval for console output
-    double tsnap     = 0.1;           // Snapshot interval for file output
+    // Stability condition for 1D heat eq.: dt <= dx^2/2
+    double dt        = (L0/N)*(L0/N)/2;  // Same as 0.5 * dx*dx
+    double tmax      = 1.0;              // Final time
+    double tprint    = 0.1;              // Print interval for console output
+    double tsnap     = 0.1;              // Snapshot interval for file output
     double nextPrint = 0.0;
     double nextSnap  = 0.0;
 
@@ -47,8 +51,9 @@ int main() {
     double *q  = (double*) calloc(N+1, sizeof(double)); 
     // q[i+0.5]: flux at interface between cells i and i+1
 
-    // Initialize T with the thin rectangle, so total integral ~ 1
+    // Initialize T with a "Dirac delta" approximated by a thin rectangle
     // T[i] = 1/(2*eps) for |x|<eps, else 0
+    // Ensures total integral of T dx = 1
     for (int i = 0; i < N; i++) {
         double x = X0 + (i + 0.5)*dx; // Cell-center coordinate
         if (fabs(x) < eps) {
@@ -61,6 +66,14 @@ int main() {
     // Time integration
     double time = 0.0;
     while (time < tmax) {
+        // Determine the time step to use for this iteration
+        double current_dt = dt;
+        
+        // If next time step would cross a snapshot time, adjust dt to hit it exactly
+        if (time < nextSnap && time + dt > nextSnap) {
+            current_dt = nextSnap - time;
+        }
+        
         // If next print is reached or exceeded, output data to console
         if (time >= nextPrint) {
             for (int i = 0; i < N; i++) {
@@ -72,10 +85,10 @@ int main() {
             nextPrint += tprint;
         }
 
-        // If next snapshot is reached or exceeded, save data to file
-        if (time >= nextSnap) {
+        // If next snapshot is reached or at exact tsnap interval, save data to file
+        if (fabs(time - nextSnap) < 1e-10) {
             char filename[100];
-            sprintf(filename, "intermediate/conduction_t%5.4f.csv", time);
+            sprintf(filename, "intermediate/snapshot-%5.4f.csv", time);
             FILE *snap_file = fopen(filename, "w");
             if (snap_file == NULL) {
                 fprintf(stderr, "Error opening file %s\n", filename);
@@ -90,20 +103,16 @@ int main() {
             nextSnap += tsnap;
         }
 
-        // Compute fluxes at cell interfaces
+        // Compute fluxes at cell interfaces using the formula:
         // q[i+0.5] = - (T[i+1] - T[i])/dx
-        // We'll use ghost values at i=-1 and i=N to enforce no-flux boundary
-        // => T[-1] = T[0], T[N] = T[N-1]
-        // This ensures q[0.5] and q[N-0.5] are zero.
         q[0]   = 0.0; // Left boundary (no flux)
         q[N]   = 0.0; // Right boundary (no flux)
         for (int i = 0; i < N - 1; i++) {
             q[i+1] = - (T[i+1] - T[i]) / dx;
         }
 
-        // Update T:  T^{n+1}_i = T^{n}_i - (dt/dx)*(q[i+0.5] - q[i-0.5])
-        // The flux difference around cell i.
-        // For i=0 and i=N-1, no-flux boundary => no change.
+        // Update T using flux divergence:
+        // T^{n+1}_i = T^{n}_i - (dt/dx)*(q[i+0.5] - q[i-0.5])
         for (int i = 0; i < N; i++) {
             double dq;
             if (i == 0) {
@@ -116,7 +125,7 @@ int main() {
             } else {
                 dq = q[i+1] - q[i];
             }
-            Tn[i] = T[i] - (dt/dx)*dq;
+            Tn[i] = T[i] - (current_dt/dx)*dq;
         }
 
         // Swap old and new
@@ -125,9 +134,7 @@ int main() {
         }
 
         // Increase time
-        time += dt;
-        // In some cases, you might want an adaptive dt or a leftover dt if
-        // time+dt > tmax. Here we keep it simple and uniform.
+        time += current_dt;
     }
 
     // Save final results to a CSV file with two columns: x and T

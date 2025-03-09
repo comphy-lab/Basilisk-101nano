@@ -101,14 +101,8 @@ deps/
 **/.cursorrules
 
 # Custom executables
-filamentsVE
-filamentsNewt
-filament_initialCondition
-filament_initialCondition_3D
-getFacet
-getData-elastic-scalar
-pinchOff
-getview3D
+**/0-conduction-simple
+**/0-conduction-transient
 
 # Never exclude these files
 !*.c
