@@ -103,6 +103,11 @@ deps/
 # Custom executables
 **/0-conduction-simple
 **/0-conduction-transient
+**/0-conduction-simple-basilisk
+**/0-conduction-transient-basilisk
+**/0-conduction-transient-basilisk-withHeaders
+**/0-conduction-Axi
+**/0-conduction-2D
 
 # Never exclude these files
 !*.c
