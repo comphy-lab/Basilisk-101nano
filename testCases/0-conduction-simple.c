@@ -25,57 +25,138 @@
 #define MAX_ITER 10000      // Maximum number of iterations
 #define TOL      1e-10      // Convergence tolerance
 
+/**
+ * Initialize temperature array and apply boundary conditions
+ * 
+ * @param temperature The temperature array to initialize
+ */
+void initialize_temperature(double temperature[N]) {
+  int i;
+  
+  // Initialize with zeros
+  for (i = 0; i < N; i++) {
+    temperature[i] = 0.0;
+  }
+  
+  // Apply boundary conditions
+  temperature[0] = 0.0;     // Left boundary condition
+  temperature[N - 1] = 1.0; // Right boundary condition
+}
+
+/**
+ * Apply boundary conditions to temperature array
+ * 
+ * @param temperature The temperature array to update
+ */
+void apply_boundary_conditions(double temperature[N]) {
+  temperature[0] = 0.0;     // Left boundary condition
+  temperature[N - 1] = 1.0; // Right boundary condition
+}
+
+/**
+ * Update interior points using central difference scheme
+ * 
+ * @param t_current Current temperature array
+ * @param t_new New temperature array to be computed
+ * @return Maximum error between current and new values
+ */
+double update_interior_points(double t_current[N], double t_new[N]) {
+  int i;
+  double error = 0.0;
+  double diff;
+  
+  for (i = 1; i < N - 1; i++) {
+    // Central difference scheme
+    t_new[i] = 0.5 * (t_current[i - 1] + t_current[i + 1]);
+    
+    // Track maximum error for convergence check
+    diff = fabs(t_new[i] - t_current[i]);
+    if (diff > error) {
+      error = diff;
+    }
+  }
+  
+  return error;
+}
+
+/**
+ * Copy new temperature values to current array
+ * 
+ * @param t_current Current temperature array (destination)
+ * @param t_new New temperature array (source)
+ */
+void update_solution(double t_current[N], double t_new[N]) {
+  int i;
+  
+  for (i = 0; i < N; i++) {
+    t_current[i] = t_new[i];
+  }
+}
+
+/**
+ * Write temperature results to a CSV file
+ * 
+ * @param temperature The final temperature array
+ * @param dx Grid spacing
+ */
+void write_results(double temperature[N], double dx) {
+  int i;
+  FILE *file = fopen("conduction-simple.csv", "w");
+  
+  if (file == NULL) {
+    fprintf(stderr, "Error opening output file\n");
+    return;
+  }
+  
+  for (i = 0; i < N; i++) {
+    double x = i * dx;  // Physical coordinate
+    fprintf(file, "%g,%g\n", x, temperature[i]);
+  }
+  
+  fclose(file);
+}
+
+/**
+ * Solve 1D steady heat conduction problem
+ * 
+ * @return Number of iterations performed
+ */
+int solve_heat_conduction() {
+  double t_current[N];  // Current temperature array
+  double t_new[N];      // Next iteration temperature array
+  double dx = 1.0 / (N - 1);  // Grid spacing
+  double error;         // Maximum error in current iteration
+  int iter;             // Loop counter
+  
+  // Initialize temperature array
+  initialize_temperature(t_current);
+  
+  // Iterative scheme to solve the equation
+  for (iter = 0; iter < MAX_ITER; iter++) {
+    // Apply boundary conditions to new array
+    apply_boundary_conditions(t_new);
+    
+    // Update interior points using central difference approximation
+    error = update_interior_points(t_current, t_new);
+    
+    // Copy the updated solution
+    update_solution(t_current, t_new);
+    
+    // Check for convergence
+    if (error < TOL) {
+      break;
+    }
+  }
+  
+  // Write results to file
+  write_results(t_current, dx);
+  
+  return iter;
+}
+
 int main() {
-    double T[N], T_new[N];  // Temperature arrays (current and next iteration)
-    double dx = 1.0 / (N - 1);  // Grid spacing
-    double error;           // Maximum error in current iteration
-    int i, iter;            // Loop counters
-
-    // Initialize temperature array with zeros
-    // Apply boundary conditions: T(0) = 0, T(N-1) = 1
-    for (i = 0; i < N; i++) {
-        T[i] = 0.0;
-    }
-    T[0]     = 0.0;  // Left boundary condition
-    T[N - 1] = 1.0;  // Right boundary condition
-
-    // Iterative scheme to solve the equation
-    for (iter = 0; iter < MAX_ITER; iter++) {
-        // Apply boundary conditions to new array
-        T_new[0]     = 0.0;
-        T_new[N - 1] = 1.0;
-
-        error = 0.0;
-        // Update interior points using central difference approximation
-        for (i = 1; i < N - 1; i++) {
-            T_new[i] = 0.5 * (T[i - 1] + T[i + 1]);  // Central difference scheme
-            double diff = fabs(T_new[i] - T[i]);
-            // Track maximum error for convergence check
-            if (diff > error) {
-                error = diff;
-            }
-        }
-
-        // Copy the updated solution to T for next iteration
-        for (i = 0; i < N; i++) {
-            T[i] = T_new[i];
-        }
-
-        // Check for convergence based on maximum temperature change
-        if (error < TOL) {
-            break;
-        }
-    }
-
-    // Save results to a CSV file with two columns: x and T
-    FILE *file = fopen("conduction-simple.csv", "w");
-    for (i = 0; i < N; i++) {
-        double x = i * dx;  // Physical coordinate
-        fprintf(file, "%g,%g\n", x, T[i]);
-    }
-    fclose(file);
-
-    printf("Number of iterations: %d\n", iter);
-
-    return 0;
+  int iterations = solve_heat_conduction();
+  printf("Number of iterations: %d\n", iterations);
+  
+  return 0;
 }
