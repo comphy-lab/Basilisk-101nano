@@ -18,7 +18,7 @@
  * 
  * The exact self-similar analytical solution is:
  * T(x,t) = \frac{1}{2\sqrt{\pi t}}e^{-x^2/4t}
- */
+*/
 
 // Simulation parameters
 #define N       200     // Number of cells
