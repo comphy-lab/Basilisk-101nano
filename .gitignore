@@ -108,6 +108,8 @@ deps/
 **/0-conduction-transient-basilisk-withHeaders
 **/0-conduction-Axi
 **/0-conduction-2D
+**/0-conduction-2D-annulus
+
 
 # Never exclude these files
 !*.c
