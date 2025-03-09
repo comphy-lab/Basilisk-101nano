@@ -80,7 +80,15 @@ deps/
 **/*.tags*
 **/*.deps
 **/*.tests
-**/*.s*
+**/*.s
+**/*.s.o
+**/*.s.d
+**/*.s.d.o
+**/*.s.d.d
+**/*.s.d.d.o
+**/*.s.d.d.d
+**/*.s.d.d.d.o
+**/*.s.d.d.d.d
 **/Video
 **/*.mp4
 **/*.json
