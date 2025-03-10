@@ -25,8 +25,8 @@ scalar T[];
 #define OUTER_RADIUS 4.0
 
 // Simulation parameters
-#define tmax 1.0
-#define tsnap 0.1
+#define tmax 100.0
+#define tsnap 1.0
 
 mgstats mgd;
 char nameOut[80], dumpFile[80], logFile[80];
@@ -87,6 +87,16 @@ event integration (i++) {
   
   // Solve the diffusion equation while respecting embedded boundaries
   mgd = diffusion (T, dt, D);
+}
+
+event adapt(i++){
+  adapt_wavelet ((scalar *){T, cs},
+    (double[]){1e-4, 1e-3},
+    9);
+  
+  solid (cs, fs, difference (sq(OUTER_RADIUS) - sq(x) - sq(y),
+                           sq(INNER_RADIUS) - sq(x) - sq(y)));
+  T[embed] = dirichlet (sq(x) + sq(y) < sq(INNER_RADIUS + 0.1) ? 1.0 : 0.0);
 }
 
 /**

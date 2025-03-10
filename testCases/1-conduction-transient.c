@@ -21,7 +21,7 @@
 */
 
 // Simulation parameters
-#define N       200     // Number of cells
+#define N       1000     // Number of cells
 #define L0      10.0    // Domain length (from -L0/2 to +L0/2)
 #define X0      (-L0/2) // Left boundary
 

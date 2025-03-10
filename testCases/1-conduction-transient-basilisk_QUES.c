@@ -53,6 +53,7 @@ int main() {
 event init (t = 0) {
   foreach()
     T[] = (fabs(x) < EPS) ? 1.0/EPS/2.0 : 0.0; 
+
 }
 
 /**

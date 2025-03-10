@@ -23,6 +23,10 @@
 
 // Declare scalar field for temperature
 scalar T[];
+// Boundary conditions
+// The diffusion solver will use homogeneous Neumann conditions by default
+T[left] = neumann(0.);
+T[right] = neumann(0.);
 
 // Simulation parameters
 #define EPS 0.1  // Width of initial temperature peak
@@ -33,7 +37,7 @@ int main() {
   // Domain setup
   L0 = 10.0;     // Domain length
   X0 = -L0/2;    // Left boundary
-  N = 200;       // Number of cells
+  N = 10000;       // Number of cells
   
   // We can use a larger timestep with the implicit solver
   // compared to the explicit version which requires dt = dx^2/2
@@ -43,11 +47,6 @@ int main() {
   char comm[80];
   sprintf (comm, "mkdir -p intermediate");
   system(comm);
-  
-  // Boundary conditions
-  // The diffusion solver will use homogeneous Neumann conditions by default
-  T[left] = neumann(0.);
-  T[right] = neumann(0.);
   
   // Run simulation
   run();
@@ -73,11 +72,11 @@ event integration (i++) {
   
   // Use the diffusion() function from diffusion.h to solve the equation
   // The heat equation is: ∂T/∂t = ∇²T which corresponds to diffusion with D = 1
-  face vector D[];
-  foreach_face()
-    D.x[] = 1.0; // Constant diffusion coefficient of 1.0
+  // face vector D[];
+  // foreach_face()
+  //   D.x[] = 1.0; // Constant diffusion coefficient of 1.0
   
-  diffusion(T, dt, D);
+  diffusion(T, dt);
 }
 
 /**

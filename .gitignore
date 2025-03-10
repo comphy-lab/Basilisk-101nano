@@ -101,14 +101,15 @@ deps/
 **/.cursorrules
 
 # Custom executables
-**/0-conduction-simple
-**/0-conduction-transient
-**/0-conduction-simple-basilisk
-**/0-conduction-transient-basilisk
-**/0-conduction-transient-basilisk-withHeaders
-**/0-conduction-Axi
-**/0-conduction-2D
-**/0-conduction-2D-annulus
+**/1-conduction-simple
+**/1-conduction-transient
+**/1-conduction-simple-basilisk
+**/1-conduction-transient-basilisk
+**/1-conduction-transient-basilisk-withHeaders
+**/1-conduction-Axi
+**/1-conduction-2D
+**/1-conduction-2D-annulus
+**/getData-generic-heatEq
 
 
 # Never exclude these files

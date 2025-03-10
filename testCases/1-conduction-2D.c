@@ -11,6 +11,7 @@
  * 
  * Initial condition:
  * T = 0 everywhere
+ * To use make file, do CFLAGS=-DDISPLAY=-1 make 1-conduction-2D.tst
 */
 
 /* Include necessary headers in the correct order for Basilisk */
@@ -19,11 +20,15 @@
 
 // Declare scalar field for temperature
 scalar T[];
+// Boundary conditions
+T[top] = dirichlet(1.);
+T[bottom] = dirichlet(0.);
+T[left] = dirichlet(0.);
+T[right] = dirichlet(0.);
 
 // Simulation parameters
-#define EPS 0.1  // Width of initial temperature peak
-#define tmax 1.0
-#define tsnap 0.1
+#define tmax 10.0
+#define tsnap 1.0
 
 mgstats mgd;
 char nameOut[80], dumpFile[80], logFile[80];
@@ -31,6 +36,7 @@ int main() {
   // Domain setup
   L0 = 10.0;     // Domain length
   X0 = -L0/2;    // Left boundary
+  Y0 = -L0/2;    // Bottom boundary
   init_grid (1 << 7);      // Number of cells
   
   // We can use a larger timestep with the implicit solver
@@ -45,12 +51,7 @@ int main() {
   sprintf (dumpFile, "restart");
   // Name of the log file. See logWriting event.
   sprintf (logFile, "logData.dat");
-  
-  // Boundary conditions
-  T[top] = dirichlet(1.);
-  T[bottom] = dirichlet(0.);
-  T[left] = dirichlet(0.);
-  T[right] = dirichlet(0.);
+
   
   // Run simulation
   run();
@@ -73,14 +74,13 @@ event init (t = 0) {
 event integration (i++) {
   // Get timestep for this iteration
   double dt = dtnext(DT);
-  
-  // Use the diffusion() function from diffusion.h to solve the equation
-  // The heat equation is: ∂T/∂t = ∇²T which corresponds to diffusion with D = 1
-  face vector D[];
-  foreach_face()
-    D.x[] = 1.0; // Constant diffusion coefficient of 1.0
-  
-  mgd = diffusion(T, dt, D);
+  mgd = diffusion(T, dt);
+}
+
+event adapt(i++){
+  adapt_wavelet ((scalar *){T},
+    (double[]){1e-4},
+    10);
 }
 
 /**
