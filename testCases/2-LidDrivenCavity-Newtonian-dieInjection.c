@@ -37,10 +37,10 @@ u.t[top] = dirichlet(1);
 u.t[bottom] = dirichlet(0);
 u.t[left]   = dirichlet(0);
 u.t[right]  = dirichlet(0);
-uf.n[left]   = 0;
-uf.n[right]  = 0;
-uf.n[top]    = 0;
-uf.n[bottom] = 0;
+// uf.n[left]   = 0;
+// uf.n[right]  = 0;
+// uf.n[top]    = 0;
+// uf.n[bottom] = 0;
 
 /**
 ## Initialization

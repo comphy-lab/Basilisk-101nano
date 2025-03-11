@@ -58,7 +58,8 @@ int main() {
  * Initialize temperature field and boundary conditions
  */
 event init (t = 0) {
-  /**
+  if (!restore(file = dumpFile)) {
+      /**
    * Define the geometry of the embedded boundary as an annulus:
    * - outer circle: sq(OUTER_RADIUS) - sq(x) - sq(y) (positive inside circle of radius 4)
    * - inner circle: sq(INNER_RADIUS) - sq(x) - sq(y) (positive inside circle of radius 1)
@@ -71,6 +72,7 @@ event init (t = 0) {
   // T = 1 on inner boundary (r = 1)
   // T = 0 on outer boundary (r = 4)
   T[embed] = dirichlet (sq(x) + sq(y) < sq(INNER_RADIUS + 0.1) ? 1.0 : 0.0);
+  }
 }
 
 /**

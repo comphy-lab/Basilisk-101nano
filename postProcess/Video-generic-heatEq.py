@@ -83,16 +83,17 @@ def process_timestep(ti, caseToProcess, folder, tsnap, GridsPerR, rmin, rmax, zm
     fig.set_size_inches(19.20, 10.80)
 
     ax.plot([0, 0], [zmin, zmax], '-.', color='grey', linewidth=lw)
-    ax.plot([rmin, rmin], [zmin, zmax], '-', color='black', linewidth=lw)
-    ax.plot([rmin, rmax], [zmin, zmin], '-', color='black', linewidth=lw)
-    ax.plot([rmin, rmax], [zmax, zmax], '-', color='black', linewidth=lw)
+    ax.plot([-rmax, -rmax], [zmin, zmax], '-', color='black', linewidth=lw)
+    ax.plot([-rmax, rmax], [zmin, zmin], '-', color='black', linewidth=lw)
+    ax.plot([-rmax, rmax], [zmax, zmax], '-', color='black', linewidth=lw)
     ax.plot([rmax, rmax], [zmin, zmax], '-', color='black', linewidth=lw)
 
-    T = np.ma.masked_where(cs != 1.0, T)
+    # T = np.ma.masked_where(cs != 1.0, T)
+    cntrl1 = ax.imshow(T, cmap="coolwarm", interpolation='Bilinear', origin='lower', extent=[rminp, rmaxp, zminp, zmaxp], vmax=1.0, vmin=0.0)
     cntrl1 = ax.imshow(T, cmap="coolwarm", interpolation='Bilinear', origin='lower', extent=[-rminp, -rmaxp, zminp, zmaxp], vmax=1.0, vmin=0.0)
 
     ax.set_aspect('equal')
-    ax.set_xlim(rmin, rmax)
+    ax.set_xlim(-rmax, rmax)
     ax.set_ylim(zmax, zmin)
     ax.set_title(f'$t/\\tau$ = {t:4.3f}', fontsize=TickLabel)
 
@@ -105,7 +106,7 @@ def process_timestep(ti, caseToProcess, folder, tsnap, GridsPerR, rmin, rmax, zm
     c1.ax.yaxis.set_ticks_position('left')
     c1.ax.yaxis.set_label_position('left')
     c1.ax.yaxis.set_major_formatter(StrMethodFormatter('{x:,.1f}'))
-    
+    ax.axis('off')
     plt.savefig(name, bbox_inches="tight")
     plt.close()
 
@@ -114,13 +115,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--CPUs', type=int, default=mp.cpu_count(), help='Number of CPUs to use')
     parser.add_argument('--nGFS', type=int, default=100, help='Number of restart files to process')
-    parser.add_argument('--GridsPerR', type=int, default=128, help='Number of grids per R')
-    parser.add_argument('--ZMAX', type=float, default=4.0, help='Maximum Z value')
-    parser.add_argument('--RMAX', type=float, default=4.0, help='Maximum R value')
-    parser.add_argument('--ZMIN', type=float, default=-4.0, help='Minimum Z value')
-    parser.add_argument('--RMIN', type=float, default=-4.0, help='Minimum R value')
-    parser.add_argument('--tsnap', type=float, default=1.0, help='Time snap')
-    parser.add_argument('--caseToProcess', type=str, default='../testCases/1-conduction-2D-annulus', help='Case to process')  
+    parser.add_argument('--GridsPerR', type=int, default=64, help='Number of grids per R')
+    parser.add_argument('--ZMAX', type=float, default=5.0, help='Maximum Z value')
+    parser.add_argument('--RMAX', type=float, default=5.0, help='Maximum R value')
+    parser.add_argument('--ZMIN', type=float, default=0.0, help='Minimum Z value')
+    parser.add_argument('--RMIN', type=float, default=0.0, help='Minimum R value')
+    parser.add_argument('--tsnap', type=float, default=10.0, help='Time snap')
+    parser.add_argument('--caseToProcess', type=str, default='../testCases/1-conduction-Axi', help='Case to process')  
     parser.add_argument('--folderToSave', type=str, default='Video', help='Folder to save')
     args = parser.parse_args()
 

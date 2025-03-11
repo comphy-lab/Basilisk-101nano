@@ -119,6 +119,13 @@ Testing on WSL is currently incomplete. In principle, the Linux installation ins
 
 For more detailed installation instructions, including configuration for different systems, setting up environment variables, installing additional dependencies, and optional libraries, please refer to the official installation guide at [http://basilisk.fr/src/INSTALL](http://basilisk.fr/src/INSTALL).
 
+### Running the codes
+
+To use the make file do:
+```bash
+CFLAGS=-DDISPLAY=-1 make NAME-of-File.tst
+```
+
 ## Reporting Issues and Feature Requests
 
 We use GitHub Issues to track bugs, feature requests, and example requests for this course. When creating an issue, please select the appropriate template to help us address your needs efficiently.

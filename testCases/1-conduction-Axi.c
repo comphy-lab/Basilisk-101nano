@@ -34,15 +34,15 @@
 scalar T[];
 
 // Simulation parameters
-#define tmax 100.0
-#define tsnap 1.0
+#define tmax 1000.0
+#define tsnap 10.0
 
 mgstats mgd;
 char nameOut[80], dumpFile[80], logFile[80];
 int main() {
   // Domain setup
   L0 = 10.0;     // Domain length
-  X0 = -L0/2;    // Left boundary
+  X0 = 0.0;    // Left boundary
   init_grid (1 << 7);      // Number of cells
   
   // We can use a larger timestep with the implicit solver
