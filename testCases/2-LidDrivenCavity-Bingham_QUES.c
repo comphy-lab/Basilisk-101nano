@@ -66,40 +66,27 @@ event init (t = 0) {
 The viscosity is updated at each timestep based on the strain rate.
 */
 event properties(i++) {
-  /**
-  ### Implementation of Generalized Newtonian Viscosity
-  
-  Rate-of-strain tensor components:
-  - D₁₁ = ∂u/∂x
-  - D₁₂ = D₂₁ = (1/2)(∂u/∂y + ∂v/∂x)
-  - D₂₂ = ∂v/∂y
-  
-  Second invariant: D₂ = √(D_ij·D_ij)
-  
-  The equivalent viscosity is:
-  $$\mu_{eq}= \mu_0 + \frac{\tau_y}{\sqrt{2} D_2 }$$
-  
-  Note: ||D|| = D₂/√2
-  
-  We regularize the viscosity by limiting it to μ_max:
-  $$\mu = \min(\mu_{eq}, \mu_{max})$$
-  */
   foreach_face() {
-    double D11 = (u.x[] - u.x[-1,0]); 
-    double D22 = ((u.y[0,1]-u.y[0,-1])+(u.y[-1,1]-u.y[-1,-1]))/4.0;
-    double D12 = 0.5*(((u.x[0,1]-u.x[0,-1])+(u.x[-1,1]-u.x[-1,-1]))/4.0 + 
-                      (u.y[] - u.y[-1,0]));
-    double D2 = sqrt(sq(D11)+sq(D22)+2.0*sq(D12))/(Delta);
+    // TODO: Calculate deformation tensor components
+    double D11 = /* Your code here */; 
+    double D22 = /* Your code here */;
+    double D12 = /* Your code here */;
+    
+    // TODO: Calculate second invariant (D2)
+    double D2 = /* Your code here */;
     
     double mu_local;
     if (D2 > 0.) {
-      double temp = tauy/(sqrt(2.0)*D2) + MU_0;
-      mu_local = min(temp, mumax);
+      // TODO: Implement regularized Bingham model
+      double temp = /* Your code here */;
+      mu_local = /* Your code here */;
     } else {
+      // Handle zero strain rate case
       mu_local = (tauy > 0.0) ? mumax : MU_0;
     }
     
-    muv.x[] = fm.x[]*(mu_local);
+    // Apply viscosity
+    muv.x[] = fm.x[] * (mu_local);
   }
 }
 

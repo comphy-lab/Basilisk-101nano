@@ -110,7 +110,10 @@ deps/
 **/1-conduction-2D
 **/1-conduction-2D-annulus
 **/getData-generic-heatEq
-
+**/2-Rayleigh-Benard
+**/2-LidDrivenCavity-Bingham
+**/2-LidDrivenCavity-Bingham_QUES
+**/2-LidDrivenCavity-Newtonian-dieInjection
 
 # Never exclude these files
 !*.c

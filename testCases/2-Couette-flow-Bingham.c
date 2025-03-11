@@ -85,67 +85,66 @@ $A_{p\mu} = \frac{1}{2^{(1-n)/n}}, Y = 1 - \tau_y$
 # Code
 */
 #include "navier-stokes/centered.h"
-char filename[80];
-double tauy,mu_0,mumax;
-double n;
-int imax = 1e4;
-#define dtmax (1e-3)
-int main(int a, char const *arguments[])
-{
-  sprintf (filename, "%s", arguments[1]);
 
-  init_grid (1<<6);
+// Global parameters
+char file_name[80];
+double tau_y = 0.0;        // Yield stress
+double mu_0 = 1.0;         // Base viscosity
+double mu_max = 1000.;     // Maximum viscosity for regularization
+double n = 1.0;            // Power law exponent
+int max_iter = 1e4;        // Maximum iterations
+#define DT_MAX (1e-3)      // Maximum timestep
+
+int main(int argc, char const *argv[])
+{
+  if (argc < 2) {
+    fprintf(stderr, "Usage: %s filename [mu_0] [tau_y] [n]\n", argv[0]);
+    return 1;
+  }
+  
+  sprintf(file_name, "%s", argv[1]);
+  
+  // Initialize grid and domain
+  init_grid(1<<6);
   L0 = 1.0;
-  origin (0.0, 0.0);
-  DT = dtmax;
+  origin(0.0, 0.0);
+  DT = DT_MAX;
   stokes = true;
   TOLERANCE = 1e-5;
 
 /**
- Values of yeild stress, viscosity, and coefficient.<br/>
- Newtonian: $\mu_0 = 1.0$; $\tau_y = 0.$ and n = 1<br/>
- Power law $\mu_0 = 1.0$; $\tau_y = 0.$ and n = 0.5<br/>
- Herschel-Bulkley $\mu_0 = 1.0$; $\tau_y = 0.25$ and n = 0.5<br/>
- Bingham $\mu_0 = 1.0$; $\tau_y = 0.25$ and n = 1<br/>
+ Values of yield stress, viscosity, and coefficient.
+ - Newtonian: $\mu_0 = 1.0$; $\tau_y = 0.$ and n = 1
+ - Power law: $\mu_0 = 1.0$; $\tau_y = 0.$ and n = 0.5
+ - Herschel-Bulkley: $\mu_0 = 1.0$; $\tau_y = 0.25$ and n = 0.5
+ - Bingham: $\mu_0 = 1.0$; $\tau_y = 0.25$ and n = 1
 */
-
-  mu_0 = 1.0;
-  tauy= 0.0;
-  n = 1.0;
-  if (a >= 3){
-    mu_0 = atof(arguments[2]);
+  // Parse command line arguments if provided
+  if (argc >= 3) {
+    mu_0 = atof(argv[2]);
   }
-  if (a >= 4){
-    tauy = atof(arguments[3]);
+  if (argc >= 4) {
+    tau_y = atof(argv[3]);
   }
-  if (a >= 5){
-    n = atof(arguments[4]);
+  if (argc >= 5) {
+    n = atof(argv[4]);
   }
 
-/**
-  the regularisation value of viscosity
-*/
-  mumax=1000;
-
-/**
- Right - left boundaries are periodic
-*/
-  periodic (right);
-/**
-  slip at the top
-*/
+  // Set boundary conditions
+  // Right-left boundaries are periodic
+  periodic(right);
+  
+  // Slip at the top
   u.t[top] = neumann(0);
   u.n[top] = neumann(0);
   uf.n[top] = neumann(0);
-/**
- no slip at the bottom
-*/
+  
+  // No slip at the bottom
   u.n[bottom] = dirichlet(0);
   uf.n[bottom] = dirichlet(0);
   u.t[bottom] = dirichlet(0);
-/**
- presure conditions are neumann 0.0
- */
+  
+  // Pressure conditions are neumann 0.0
   p[top] = neumann(0);
   pf[top] = neumann(0);
   p[bottom] = neumann(0);
@@ -162,78 +161,86 @@ face vector muv[];
 /**
 ## Initialization event
 */
-event init (t = 0) {
-  // preparing viscosity to be used as Non-Newtonian fluid
+event init(t = 0) {
+  // Set Non-Newtonian viscosity
   mu = muv;
+  
   /**
-    presure gradient `mdpdx`
+   Pressure gradient `mdpdx`
    $$-\frac{dp}{dx} = 1 $$
   */
-  const face vector mdpdx[] = {1.0,0.0};
+  const face vector mdpdx[] = {1.0, 0.0};
   a = mdpdx;
-  /**
-   Initialy at rest
-  */
+  
+  // Initialize velocity field at rest
   foreach() {
     u.x[] = 0;
     u.y[] = 0;
+    un[] = 0;
   }
-  foreach(){
-    un[] = u.x[];
-  }
-  dump (file = "start");
+  
+  dump(file = "start");
 }
 
 /**
-We look for a stationary solution. */
-event logfile (i += 500; i <= imax) {
-  double du = change (u.x, un);
+## Monitoring convergence 
+We look for a stationary solution by checking changes in velocity field.
+*/
+event logfile(i += 500; i <= max_iter) {
+  double du = change(u.x, un);
   fprintf(ferr, "i = %d: err = %g\n", i, du);
-  if (i > 0 && du < 1e-6){
-    dump (file = filename);
+  
+  if (i > 0 && du < 1e-6) {
+    dump(file = file_name);
     return 1; /* stop */
   }
-  if (i==imax){
-    dump (file = filename);
+  
+  if (i == max_iter) {
+    dump(file = file_name);
   }
 }
 
-
-event properties(i++) { // Overloading the properties event
+/**
+## Calculating viscosity for generalized Newtonian fluid
+*/
+event properties(i++) {
   /**
-  ## Implementation of generalized Newtonian viscosity
-
-   $$D_{11} = \frac{\partial u}{\partial x}$$
-   $$D_{12} = \frac{1}{2}\left( \frac{\partial u}{\partial y}+ \frac{\partial v}{\partial x}\right)$$
-   $$D_{21} = \frac{1}{2}\left( \frac{\partial u}{\partial y}+ \frac{\partial v}{\partial x}\right)$$
-   $$D_{22} = \frac{\partial v}{\partial y}$$
-   The second invariant is $D_2=\sqrt{D_{ij}D_{ij}}$ (this is the Frobenius norm)
-   $$D_2^2= D_{ij}D_{ij}= D_{11}D_{11} + D_{12}D_{21} + D_{21}D_{12} + D_{22}D_{22}$$
-   the equivalent viscosity is
-   $$\mu_{eq}= \mu_0\left(\frac{D_2}{\sqrt{2}}\right)^{N-1} + \frac{\tau_y}{\sqrt{2} D_2 }$$
-   **Note:** $\|D\| = D_2/\sqrt{2}$
-
-   Finally, mu is the min of of $\mu_{eq}$ and a large $\mu_{max}$.
-
-   The fluid flows always, it is not a solid, but a very viscous fluid.
-   $$ \mu = \text{min}\left(\mu_{eq}, \mu_{max}\right) $$
+  Implementation of generalized Newtonian viscosity:
+  
+  The second invariant is $D_2=\sqrt{D_{ij}D_{ij}}$ (Frobenius norm)
+  $$D_2^2 = D_{ij}D_{ij} = D_{11}^2 + 2D_{12}^2 + D_{22}^2$$
+  
+  The equivalent viscosity is:
+  $$\mu_{eq} = \mu_0\left(\frac{D_2}{\sqrt{2}}\right)^{n-1} + 
+               \frac{\tau_y}{\sqrt{2} D_2}$$
+  
+  Finally: $\mu = \min(\mu_{eq}, \mu_{max})$
   */
-  double muTemp = mu_0;
   foreach_face() {
+    // Calculate deformation tensor components at face centers
     double D11 = (u.x[] - u.x[-1,0]);
-    double D22 = ((u.y[0,1]-u.y[0,-1])+(u.y[-1,1]-u.y[-1,-1]))/4.0;
-    double D12 = 0.5*(((u.x[0,1]-u.x[0,-1])+(u.x[-1,1]-u.x[-1,-1]))/4.0 + (u.y[] - u.y[-1,0]));
-    double D2 = sqrt(sq(D11)+sq(D22)+2.0*sq(D12))/(Delta);
+    double D22 = ((u.y[0,1] - u.y[0,-1]) + (u.y[-1,1] - u.y[-1,-1])) / 4.0;
+    double D12 = 0.5 * (((u.x[0,1] - u.x[0,-1]) + 
+              (u.x[-1,1] - u.x[-1,-1])) / 4.0 + (u.y[] - u.y[-1,0]));
+    
+    // Calculate second invariant
+    double D2 = sqrt(sq(D11) + sq(D22) + 2.0 * sq(D12)) / Delta;
+    
+    // Calculate effective viscosity
+    double mu_temp;
     if (D2 > 0.0) {
-      double temp = tauy/(sqrt(2.0)*D2) + mu_0*exp((n-1.0)*log(D2/sqrt(2.0)));
-      muTemp = min(temp, mumax);
+      double temp = tau_y / (sqrt(2.0) * D2) + 
+                   mu_0 * exp((n - 1.0) * log(D2 / sqrt(2.0)));
+      mu_temp = min(temp, mu_max);
     } else {
-      if (tauy > 0.0 || n < 1.0){
-        muTemp = mumax;
+      if (tau_y > 0.0 || n < 1.0) {
+        mu_temp = mu_max;
       } else {
-        muTemp = (n == 1.0 ? mu_0 : 0.0);
+        mu_temp = (n == 1.0 ? mu_0 : 0.0);
       }
     }
-    muv.x[] = fm.x[]*(muTemp);
+    
+    // Apply viscosity at face
+    muv.x[] = fm.x[] * mu_temp;
   }
 }
