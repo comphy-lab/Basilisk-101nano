@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Save the original directory
-ORIG_DIR=$(PWD)
+ORIG_DIR=$(pwd)
 
 mkdir -p $1
 
