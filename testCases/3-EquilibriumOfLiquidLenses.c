@@ -199,7 +199,6 @@ event adapt(i++) {
   scalar KAPPA1[], KAPPA2[];
   curvature(f1, KAPPA1);                // Curvature of interface 1
   curvature(f2, KAPPA2);                // Curvature of interface 2
-  boundary ((scalar *){KAPPA1, KAPPA2});
 
   // Refine mesh based on VOF fractions, velocity fields, and curvatures
   // This ensures high resolution at interfaces and regions of high velocity gradients
@@ -276,7 +275,9 @@ event logWriting (i+=10) {
   shape satisfies the balance of surface tension forces at the triple junctions
   as described by the Neumann triangle relationship.
   */
-  if (i>1e2 && ke < 1e-6){
+  if (i>1e2 && ke < 1e-8){
+    fprintf(ferr, "Equilibrium reached at time %g\n", t);
+    dump (file = "finalState");
     return 1;                          // Stop simulation when equilibrium is reached
   }
 }
