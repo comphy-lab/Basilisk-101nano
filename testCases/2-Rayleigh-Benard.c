@@ -50,7 +50,7 @@ event init (t = 0) {
   mu = muv;
   
   // Set Boussinesq parameters
-  kappa = 1.0/100.0;  // Thermal diffusivity (Pr = 1.0)
+  kappa = 1.0/100.0;  // Thermal diffusivity 
   AccG = 1000.0;         // Gravitational acceleration
   beta = 1.0;         // Thermal expansion coefficient
   T0 = 0.5;           // Reference temperature
