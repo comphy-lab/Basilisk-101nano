@@ -58,7 +58,7 @@
 
 #include "axi.h"                  // Axisymmetric formulation (r,z) coordinates
 #include "navier-stokes/centered.h"  // Main Navier-Stokes solver
-
+#define _SCALAR 1
 /**
  * ## Viscoelastic Model Implementation
  * We use the log-conformation approach for numerical stability when simulating viscoelastic fluids.

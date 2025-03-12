@@ -124,7 +124,8 @@ deps/
 **/3-HeatedDropImpact-Axi
 **/3-EquilibriumOfLiquidLenses
 **/4-BurstingBubbles-WithPolymers
-
+**/getFacet
+**/getData
 # Never exclude these files
 !*.c
 !*.h
