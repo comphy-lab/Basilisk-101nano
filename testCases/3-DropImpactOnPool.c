@@ -70,7 +70,6 @@ To run this simulation: `make 3-DropImpactOnPool.tst`
 #include "navier-stokes/conserving.h" // Conservative momentum advection
 #include "tension.h"                  // Surface tension forces
 #include "reduced.h"                  // Reduced gravity formulation
-#include "distance.h"                 // Distance function utilities
 
 // ======= Numerical parameters =======
 #define tsnap (0.0025)                // Time interval for output snapshots
@@ -224,6 +223,8 @@ event logWriting(i++) {
   foreach(reduction(+:ke)){
     ke += (2*pi*y)*(0.5*(f[])*rho1*(sq(u.x[]) + sq(u.y[])))*sq(Delta);
   }
+
+  assert(ke < 1e6);
   
   // Write to log file and terminal
   static FILE * fp;
