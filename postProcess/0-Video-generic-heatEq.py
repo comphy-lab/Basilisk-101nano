@@ -59,11 +59,16 @@ def gettingfield(filename, zmin, zmax, rmin, rmax, nr):
     T.resize((nz, nr))
     cs.resize((nz, nr))
 
-    # rotate by 90 degrees
-    R = np.rot90(R)
-    Z = np.rot90(Z)
-    T = np.rot90(T)
-    cs = np.rot90(cs)
+    # rotate by 270 degrees
+    R = np.rot90(R, k=1)
+    Z = np.rot90(Z, k=1)
+    T = np.rot90(T, k=1)
+    cs = np.rot90(cs, k=1)
+    # flip the array
+    R = np.flip(R, axis=0)
+    Z = np.flip(Z, axis=0)
+    T = np.flip(T, axis=0)
+    cs = np.flip(cs, axis=0)
 
     return R, Z, T, cs, nz
 # ----------------------------------------------------------------------------------------------------------------------
@@ -96,7 +101,7 @@ def process_timestep(ti, caseToProcess, folder, tsnap, GridsPerR, rmin, rmax, zm
     ax.plot([-rmax, rmax], [zmax, zmax], '-', color='black', linewidth=lw)
     ax.plot([rmax, rmax], [zmin, zmax], '-', color='black', linewidth=lw)
 
-    # T = np.ma.masked_where(cs != 1.0, T)
+    T = np.ma.masked_where(cs != 1.0, T)
     cntrl1 = ax.imshow(T, cmap="coolwarm", interpolation='Bilinear', origin='lower', extent=[rminp, rmaxp, zminp, zmaxp], vmax=1.0, vmin=0.0)
 
     ax.set_aspect('equal')

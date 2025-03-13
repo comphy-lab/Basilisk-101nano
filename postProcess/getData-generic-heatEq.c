@@ -10,7 +10,7 @@
 #include "output.h"
 
 scalar T[];
-scalar cs[] = {1};
+scalar cs[];
 
 char filename[80];
 int nx, ny, len;
@@ -32,6 +32,17 @@ int main(int a, char const *arguments[])
   Actual run and codes!
   */
   restore (file = filename);
+
+  // if sum of all cs is 0, then set cs to 1
+  double sum = 0;
+  foreach() {
+    sum += cs[];
+  }
+  if (sum == 0) {
+    foreach() {
+      cs[] = 1;
+    }
+  }
 
   FILE * fp = ferr;
   Deltay = (double)((ymax-ymin)/(ny));
