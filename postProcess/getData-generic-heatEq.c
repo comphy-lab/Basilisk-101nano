@@ -26,7 +26,6 @@ int main(int a, char const *arguments[])
   ny = atoi(arguments[6]);
 
   list = list_add (list, T);
-  list = list_add (list, cs);
 
   /*
   Actual run and codes!
@@ -42,7 +41,15 @@ int main(int a, char const *arguments[])
     foreach() {
       cs[] = 1;
     }
+  } else {
+    for (scalar s in list){
+      foreach(){
+        s[] *= cs[];
+      }
+    }
   }
+
+  list = list_add (list, cs);
 
   FILE * fp = ferr;
   Deltay = (double)((ymax-ymin)/(ny));
