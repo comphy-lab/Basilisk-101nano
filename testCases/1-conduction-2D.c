@@ -34,7 +34,7 @@ mgstats mgd;
 char nameOut[80], dumpFile[80], logFile[80];
 int main() {
   // Domain setup
-  L0 = 10.0;     // Domain length
+  L0 = 8.0;     // Domain length
   X0 = -L0/2;    // Left boundary
   Y0 = -L0/2;    // Bottom boundary
   init_grid (1 << 7);      // Number of cells

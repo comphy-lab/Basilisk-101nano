@@ -4,6 +4,8 @@
 # Physics of Fluids Department
 # Last updated: Mar 8, 2025
 
+# This code should be able to process: 1-conduction-2D.c and 1-conduction-2D-annulus.c.
+
 import numpy as np
 import os
 import subprocess as sp
@@ -57,6 +59,12 @@ def gettingfield(filename, zmin, zmax, rmin, rmax, nr):
     T.resize((nz, nr))
     cs.resize((nz, nr))
 
+    # rotate by 90 degrees
+    R = np.rot90(R)
+    Z = np.rot90(Z)
+    T = np.rot90(T)
+    cs = np.rot90(cs)
+
     return R, Z, T, cs, nz
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -90,11 +98,10 @@ def process_timestep(ti, caseToProcess, folder, tsnap, GridsPerR, rmin, rmax, zm
 
     # T = np.ma.masked_where(cs != 1.0, T)
     cntrl1 = ax.imshow(T, cmap="coolwarm", interpolation='Bilinear', origin='lower', extent=[rminp, rmaxp, zminp, zmaxp], vmax=1.0, vmin=0.0)
-    cntrl1 = ax.imshow(T, cmap="coolwarm", interpolation='Bilinear', origin='lower', extent=[-rminp, -rmaxp, zminp, zmaxp], vmax=1.0, vmin=0.0)
 
     ax.set_aspect('equal')
-    ax.set_xlim(-rmax, rmax)
-    ax.set_ylim(zmax, zmin)
+    ax.set_xlim(rmin, rmax)
+    ax.set_ylim(zmin, zmax)
     ax.set_title(f'$t/\\tau$ = {t:4.3f}', fontsize=TickLabel)
 
     l, b, w, h = ax.get_position().bounds
@@ -116,12 +123,12 @@ def main():
     parser.add_argument('--CPUs', type=int, default=mp.cpu_count(), help='Number of CPUs to use')
     parser.add_argument('--nGFS', type=int, default=100, help='Number of restart files to process')
     parser.add_argument('--GridsPerR', type=int, default=64, help='Number of grids per R')
-    parser.add_argument('--ZMAX', type=float, default=5.0, help='Maximum Z value')
-    parser.add_argument('--RMAX', type=float, default=5.0, help='Maximum R value')
-    parser.add_argument('--ZMIN', type=float, default=0.0, help='Minimum Z value')
-    parser.add_argument('--RMIN', type=float, default=0.0, help='Minimum R value')
-    parser.add_argument('--tsnap', type=float, default=10.0, help='Time snap')
-    parser.add_argument('--caseToProcess', type=str, default='../testCases/1-conduction-Axi', help='Case to process')  
+    parser.add_argument('--ZMAX', type=float, default=4.0, help='Maximum Z value')
+    parser.add_argument('--RMAX', type=float, default=4.0, help='Maximum R value')
+    parser.add_argument('--ZMIN', type=float, default=-4.0, help='Minimum Z value')
+    parser.add_argument('--RMIN', type=float, default=-4.0, help='Minimum R value')
+    parser.add_argument('--tsnap', type=float, default=1.0, help='Time snap')
+    parser.add_argument('--caseToProcess', type=str, default='../testCases/1-conduction-2D', help='Case to process')  
     parser.add_argument('--folderToSave', type=str, default='Video', help='Folder to save')
     args = parser.parse_args()
 
