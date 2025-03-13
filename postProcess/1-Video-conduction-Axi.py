@@ -118,13 +118,13 @@ def main():
     parser.add_argument('--CPUs', type=int, default=mp.cpu_count(), help='Number of CPUs to use')
     parser.add_argument('--nGFS', type=int, default=100, help='Number of restart files to process')
     parser.add_argument('--GridsPerR', type=int, default=64, help='Number of grids per R')
-    parser.add_argument('--ZMAX', type=float, default=5.0, help='Maximum Z value')
-    parser.add_argument('--RMAX', type=float, default=5.0, help='Maximum R value')
+    parser.add_argument('--ZMAX', type=float, default=4.0, help='Maximum Z value')
+    parser.add_argument('--RMAX', type=float, default=4.0, help='Maximum R value')
     parser.add_argument('--ZMIN', type=float, default=0.0, help='Minimum Z value')
     parser.add_argument('--RMIN', type=float, default=0.0, help='Minimum R value')
-    parser.add_argument('--tsnap', type=float, default=10.0, help='Time snap')
+    parser.add_argument('--tsnap', type=float, default=1.0, help='Time snap')
     parser.add_argument('--caseToProcess', type=str, default='../testCases/1-conduction-Axi', help='Case to process')  
-    parser.add_argument('--folderToSave', type=str, default='Video', help='Folder to save')
+    parser.add_argument('--folderToSave', type=str, default='1-conduction-Axi', help='Folder to save')
     args = parser.parse_args()
 
     num_processes = args.CPUs
