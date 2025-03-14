@@ -110,7 +110,6 @@ deps/
 **/1-conduction-Axi
 **/1-conduction-2D
 **/1-conduction-2D-annulus
-**/getData-generic-heatEq
 **/2-Rayleigh-Benard
 **/2-LidDrivenCavity-Bingham
 **/2-LidDrivenCavity-Bingham_QUES
@@ -132,7 +131,12 @@ deps/
 
 **/getFacet
 **/getData
+**/getData-generic-heatEq
+**/getData-generic-one-phase
+**/getData-LidDriven
 # Never exclude these files
 !*.c
 !*.h
 !*.sbatch
+postProcess/getData-generic
+postProcess/getData-LidDriven-Line

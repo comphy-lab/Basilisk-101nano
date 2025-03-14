@@ -135,6 +135,8 @@ int main() {
   
   // Run simulations for different yield stress values
   for (counter = 0; counter < 5; counter++) {
+
+    fprintf(ferr, "Doing counter %d\n", counter);
     // Set yield stress for this run
     if (counter == 0) {
       tauy = 0.0;  // Newtonian case
@@ -146,16 +148,11 @@ int main() {
     if (counter > 1) {
       mumax = 1e4;
     } else {
-      mumax = 1e3;
+      mumax = 1e2;
     }
     
     fprintf(ferr, "tauy = %g\n", tauy);
     sprintf(filename, "tau%d", counter);
-    
-    // Store current velocity for convergence check
-    foreach() {
-      un[] = u.x[];
-    }
     
     run();
   }
