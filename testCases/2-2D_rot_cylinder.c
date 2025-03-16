@@ -1,68 +1,84 @@
 /**
-#TODO: add contribution and document the code!
-Contributed by []()
+# 2D Rotating Cylindrical Annulus Simulation
+ 
+Simulates the flow between two concentric cylinders where the inner cylinder rotates.
+This is a classic problem in fluid dynamics known as Taylor-Couette flow.
+
+Contributed by [Paula Magrinya Aguilo](https://github.com/Pmagrinya)
 */
 
-// #include "grid/multigrid.h"
-#include "embed.h"
-#include "navier-stokes/centered.h"
+#include "embed.h"         // For embedded boundaries
+#include "navier-stokes/centered.h"  // Centered Navier-Stokes solver
 
 // Define inner and outer radii
-#define INNER_RADIUS 1.0
-#define OUTER_RADIUS 1.5
+#define INNER_RADIUS 1.0   // Radius of inner cylinder
+#define OUTER_RADIUS 1.5   // Radius of outer cylinder
 
 // Velocidad angular de rotación (rad/s)
-#define OMEGA 1.0
-#define tsnap 1.0
-#define tmax 10.0
-const face vector muv[] = {1, 1}; // Ej. nu = 1e-3
+#define OMEGA 1.0          // Angular velocity of rotation (rad/s)
+#define tsnap 1.0          // Time interval between snapshots
+#define tmax 10.0          // Maximum simulation time
+const face vector muv[] = {1, 1}; // Viscosity coefficient (e.g., nu = 1e-3)
 
-char logFile[80];
-char dumpFile[80];
-char nameOut[80];
+// File naming variables
+char logFile[80];          // Log file name
+char dumpFile[80];         // Restart file name
+char nameOut[80];          // Output snapshot file name
 
 int main() {
-  // Ajustamos el tamaño del dominio para que sea [-1,1] x [-1,1] (por ejemplo)
- 
-    L0 = 2.0 * OUTER_RADIUS;
-    // Center the domain at origin
-    origin (-L0/2, -L0/2);
-    // Initialize grid (adjust resolution as needed)
-    init_grid (1 << 7);
-    
-    // We use the implicit solver for stability
-    DT = 0.01;
-    
-    // Create a folder for simulation snapshots
-    char comm[80];
-    sprintf (comm, "mkdir -p intermediate");
-    system(comm);
-    sprintf (dumpFile, "restart");
-    sprintf (logFile, "logData.dat");
-    
-    //mu = muv;
-    
-
+  // Ajustamos el tamaño del dominio para que sea [-L0/2,L0/2] x [-L0/2,L0/2] (por ejemplo)
+  // Adjust the domain size to be [-L0/2,L0/2] x [-L0/2,L0/2] (for example)
+  L0 = 2.0 * OUTER_RADIUS; // Domain size based on outer radius
+  // Center the domain at origin
+  origin (-L0/2, -L0/2);
+  // Initialize grid (adjust resolution as needed)
+  init_grid (1 << 7);      // Grid resolution 2^7 = 128 cells per dimension
+  
+  // We use the implicit solver for stability
+  DT = 0.01;               // Maximum timestep size
+  
+  // Create a folder for simulation snapshots
+  char comm[80];
+  sprintf (comm, "mkdir -p intermediate");
+  system(comm);
+  sprintf (dumpFile, "restart");
+  sprintf (logFile, "logData.dat");
+  
   // Iniciamos la simulación
+  // Start the simulation
   run();
 }
 
 /**
  * En t=0, definimos la geometría del cilindro y su condición de contorno.
+ * At t = 0, we define the cylinder geometry and its boundary condition.
+ * 
+ * This function initializes:
+ * 1. The viscosity field
+ * 2. The cylindrical annulus geometry using embedded boundaries
+ * 3. Boundary conditions for normal and tangential velocities:
+ *    - Inner cylinder rotates with angular velocity OMEGA
+ *    - Outer cylinder is stationary
  */
 event init (t = 0) {
-    mu = fm;
-    // Inicializamos el campo de velocidad u = 0
-    
-    
+    mu = fm;               // Set viscosity field for the fluid domain
     solid (cs, fs, difference (sq(OUTER_RADIUS) - sq(x) - sq(y),
                              sq(INNER_RADIUS) - sq(x) - sq(y)));
     
+    // Boundary conditions:
+    // Normal velocity component (no-penetration)
     u.n[embed] = dirichlet (x*x + y*y > sq(OUTER_RADIUS-0.1) ? 0. : - y);
-    u.t[embed] = dirichlet (x*x + y*y > sq(OUTER_RADIUS-0.1) ? 0. :   x);
-    
+    // Tangential velocity component (rotation)
+    u.t[embed] = dirichlet (x*x + y*y > sq(OUTER_RADIUS-0.1) ? 0. :   x);    
 }
 
+/**
+ * Creates simulation snapshots at regular time intervals
+ * 
+ * This saves:
+ * 1. A restart file for resuming the simulation
+ * 2. Snapshot files in the 'intermediate' directory for visualization and analysis
+ */
 event writingFiles (t = 0.0; t += tsnap; t < tmax+tsnap) {
   dump (file = dumpFile);
   sprintf (nameOut, "intermediate/snapshot-%5.4f", t);
@@ -70,7 +86,15 @@ event writingFiles (t = 0.0; t += tsnap; t < tmax+tsnap) {
 }
 
 /**
- * Write logs every timestep about the convergence of the diffusion solver
+ * Write logs every timestep!
+ * 
+ * Records basic simulation statistics:
+ * - Iteration number
+ * - Current simulation time
+ * - Current timestep size
+ * 
+ * Data is written both to stderr and to the log file for monitoring
+ * and post-processing.
  */
 event logWriting (i++) {
   if (i == 0) {

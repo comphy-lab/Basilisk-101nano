@@ -110,6 +110,8 @@ deps/
 **/1-conduction-Axi
 **/1-conduction-2D
 **/1-conduction-2D-annulus
+**/2-2D_rot_cylinder_ink
+**/2-2D_rot_cylinder
 **/2-Rayleigh-Benard
 **/2-LidDrivenCavity-Bingham
 **/2-LidDrivenCavity-Bingham_QUES
