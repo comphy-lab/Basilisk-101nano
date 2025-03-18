@@ -20,7 +20,7 @@
 // Angular velocity of rotation (rad/s)
 #define OMEGA 1.0
 // Time interval between snapshots
-#define tsnap 1.0
+#define tsnap 0.01
 // Maximum simulation time
 #define tmax 4.0
 // Viscosity field (uniform in this case)
