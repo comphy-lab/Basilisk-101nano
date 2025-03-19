@@ -19,9 +19,9 @@
 ### 2. Navier-Stokes Equations
 | Test Case | Post-Processing Script | Status |
 |-----------|------------------------|--------|
-| [2-Poiseuille-flow-Newtonian.c](../testCases/2-Poiseuille-flow-Newtonian.c) | [getData-generic.c](getData-generic.c) | ⏳ In Progress |
-| [2-Poiseuille-flow-Bingham.c](../testCases/2-Poiseuille-flow-Bingham.c) | [getData-generic.c](getData-generic.c) | ⏳ In Progress |
-| [2-2D_rot_cylinder.c](../testCases/2-2D_rot_cylinder.c) | [Video-generic.py](Video-generic.py) | ⏳ In Progress |
+| [2-Poiseuille-flow-Newtonian.c](../testCases/2-Poiseuille-flow-Newtonian.c) | [2-casesWithNS.ipynb](2-casesWithNS.ipynb) | ⏳ In Progress |
+| [2-Poiseuille-flow-Bingham.c](../testCases/2-Poiseuille-flow-Bingham.c) | [2-casesWithNS.ipynb](2-casesWithNS.ipynb) | ⏳ In Progress |
+| [2-2D_rot_cylinder.c](../testCases/2-2D_rot_cylinder.c) | [2-casesWithNS.ipynb](2-casesWithNS.ipynb) | [✅ Complete](#2-2d_rot_cylinder) |
 | [2-2D_rot_cylinder_ink.c](../testCases/2-2D_rot_cylinder_ink.c) | [Video-generic.py](Video-generic.py) | ⏳ In Progress |
 | [2-LidDrivenCavity-Newtonian.c](../testCases/2-LidDrivenCavity-Newtonian.c) | [getData-LidDriven.c](getData-LidDriven.c) | ⏳ In Progress |
 | [2-LidDrivenCavity-Newtonian-dieInjection.c](../testCases/2-LidDrivenCavity-Newtonian-dieInjection.c) | [getData-LidDriven.c](getData-LidDriven.c) | ⏳ In Progress |
@@ -84,7 +84,7 @@ Heat flux on the top wall is modeled as a Gaussian heat flux.
 (Post-processing script in progress)
 
 ## 2-2D_rot_cylinder
-(Post-processing script in progress)
+![](img/2-2D_rot_cylinder.png)
 
 ## 2-2D_rot_cylinder_ink
 (Post-processing script in progress)
@@ -96,7 +96,7 @@ Heat flux on the top wall is modeled as a Gaussian heat flux.
 
 This is a lid driven cavity problem with a Bingham fluid.
 
-![](img/lid_driven_cavity_bingham_flow.png)
+![](img/2-LidDrivenCavity-Bingham-lid_driven_cavity_bingham_flow.png)
 
 ### Newtonian 
 
@@ -104,13 +104,13 @@ This is a lid driven cavity problem with a Bingham fluid.
 
 ### Bingham 
 - $\tau_y = 0.707$
-![](img/tau0.7071067811865475.png)
+![](img/2-LidDrivenCavity-Bingham-tau0.7071067811865475.png)
 - $\tau_y = 7.07$
-![](img/tau7.071067811865475.png)
+![](img/2-LidDrivenCavity-Bingham-tau7.071067811865475.png)
 - $\tau_y = 70.7$
-![](img/tau70.71067811865474.png)
+![](img/2-LidDrivenCavity-Bingham-tau70.71067811865474.png)
 - $\tau_y = 707$
-![](img/tau707.1067811865474.png)
+![](img/2-LidDrivenCavity-Bingham-tau707.1067811865474.png)
 
 ## 2-Rayleigh-Benard
 (Post-processing script in progress)
