@@ -17,12 +17,13 @@
 ### 2. Navier-Stokes Equations
 | Test Case | Post-Processing Script | Status |
 |-----------|------------------------|--------|
-| [2-LidDrivenCavity-Bingham.c](../testCases/2-LidDrivenCavity-Bingham.c) | [2-LidDrivenCavity-Bingham.ipynb](2-LidDrivenCavity-Bingham.ipynb) | ✅ Complete |
-| [2-LidDrivenCavity-Newtonian.c](../testCases/2-LidDrivenCavity-Newtonian.c) | [getData-LidDriven.c](getData-LidDriven.c) | ⏳ In Progress |
 | [2-Poiseuille-flow-Newtonian.c](../testCases/2-Poiseuille-flow-Newtonian.c) | [getData-generic.c](getData-generic.c) | ⏳ In Progress |
 | [2-Poiseuille-flow-Bingham.c](../testCases/2-Poiseuille-flow-Bingham.c) | [getData-generic.c](getData-generic.c) | ⏳ In Progress |
 | [2-2D_rot_cylinder.c](../testCases/2-2D_rot_cylinder.c) | [Video-generic.py](Video-generic.py) | ⏳ In Progress |
 | [2-2D_rot_cylinder_ink.c](../testCases/2-2D_rot_cylinder_ink.c) | [Video-generic.py](Video-generic.py) | ⏳ In Progress |
+| [2-LidDrivenCavity-Newtonian.c](../testCases/2-LidDrivenCavity-Newtonian.c) | [getData-LidDriven.c](getData-LidDriven.c) | ⏳ In Progress |
+| [2-LidDrivenCavity-Newtonian-dieInjection.c](../testCases/2-LidDrivenCavity-Newtonian-dieInjection.c) | [getData-LidDriven.c](getData-LidDriven.c) | ⏳ In Progress |
+| [2-LidDrivenCavity-Bingham.c](../testCases/2-LidDrivenCavity-Bingham.c) | [2-LidDrivenCavity-Bingham.ipynb](2-LidDrivenCavity-Bingham.ipynb) | ✅ Complete |
 | [2-Rayleigh-Benard.c](../testCases/2-Rayleigh-Benard.c) | [2-Rayleigh-Benard.py](2-Rayleigh-Benard.py) | ⏳ In Progress |
 
 ### 3. Multiphase Flow
