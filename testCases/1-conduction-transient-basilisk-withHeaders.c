@@ -41,7 +41,7 @@ int main() {
   
   // We can use a larger timestep with the implicit solver
   // compared to the explicit version which requires dt = dx^2/2
-  DT = 0.01;
+  DT = 1e-4;
   
   // Create output directory
   char comm[80];
