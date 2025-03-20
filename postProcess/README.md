@@ -113,7 +113,7 @@ This is a lid driven cavity problem with a Bingham fluid.
 ![](img/2-LidDrivenCavity-Bingham-tau707.1067811865474.png)
 
 ## 2-Rayleigh-Benard
-(Post-processing script in progress)
+![](img/2-Rayleigh-Benard.gif)
 
 ## 3-DropImpactOnSolids
 (Post-processing script in progress)

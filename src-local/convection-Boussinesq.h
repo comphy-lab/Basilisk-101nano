@@ -62,8 +62,6 @@ double beta = 1.0;
 // Reference temperature (default value, can be modified by the user)
 double T0 = 0.0;
 
-// Rayleigh number = g·β·ΔT·L³/(ν·κ), computed for reference
-double Ra = 1e0;
 
 /**
 ## Boundary conditions for temperature

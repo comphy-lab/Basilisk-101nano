@@ -30,8 +30,8 @@ double end = 10.0;                // End time for simulation
 
 // Scalar field for convergence check
 scalar un[], vn[];                // Previous velocity components
-#define Ra 1e4
-const face vector muv[] = {1./Ra, 1./Ra};  // Face-centered viscosity field
+#define NU (1e-2)
+const face vector muv[] = {NU, NU};  // Face-centered viscosity field
 
 /**
 ## Boundary Conditions
@@ -50,10 +50,12 @@ event init (t = 0) {
   mu = muv;
   
   // Set Boussinesq parameters
-  kappa = 1e0;  // Thermal diffusivity -> 1/Prandtl number
+  kappa = 1e-2;  // Thermal diffusivity 
   AccG = 1e3;         // Gravitational acceleration
   beta = 1e0;         // Thermal expansion coefficient
   T0 = 0.5;           // Reference temperature
+
+  fprintf(ferr, "Prandtl number is Pr = %g and Rayleigh number is Ra = %g\n", NU/kappa, AccG*beta/(NU*kappa));
   
   // Initialize velocity field
   foreach() {
