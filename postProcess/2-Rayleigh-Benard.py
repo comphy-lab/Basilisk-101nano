@@ -27,13 +27,13 @@ matplotlib.rcParams['text.usetex'] = True
 matplotlib.rcParams['text.latex.preamble'] = r'\usepackage{amsmath}'
 
 def gettingfield(filename, zmin, zmax, rmin, rmax, nr):
-    exe = ["./getData-generic-heatEq", filename, str(zmin), str(rmin), str(zmax), str(rmax), str(nr)]
+    exe = ["./getData-Rayleigh-Benard", filename, str(zmin), str(rmin), str(zmax), str(rmax), str(nr)]
     p = sp.Popen(exe, stdout=sp.PIPE, stderr=sp.PIPE)
     stdout, stderr = p.communicate()
     temp1 = stderr.decode("utf-8")
     temp2 = temp1.split("\n")
     # print(temp2) #debugging
-    Rtemp, Ztemp, Ttemp, cstemp  = [],[],[],[]
+    Rtemp, Ztemp, Ttemp, veltemp  = [],[],[],[]
 
     for n1 in range(len(temp2)):
         temp3 = temp2[n1].split(" ")
@@ -43,12 +43,12 @@ def gettingfield(filename, zmin, zmax, rmin, rmax, nr):
             Ztemp.append(float(temp3[0]))
             Rtemp.append(float(temp3[1]))
             Ttemp.append(float(temp3[2]))
-            cstemp.append(float(temp3[3]))
+            veltemp.append(float(temp3[3]))
 
     R = np.asarray(Rtemp)
     Z = np.asarray(Ztemp)
     T = np.asarray(Ttemp)
-    cs = np.asarray(cstemp)
+    vel = np.asarray(veltemp)
     nz = int(len(Z)/nr)
 
     # print("nr is %d %d" % (nr, len(R))) # debugging
@@ -57,20 +57,20 @@ def gettingfield(filename, zmin, zmax, rmin, rmax, nr):
     R.resize((nz, nr))
     Z.resize((nz, nr))
     T.resize((nz, nr))
-    cs.resize((nz, nr))
+    vel.resize((nz, nr))
 
     # rotate by 270 degrees
     R = np.rot90(R, k=1)
     Z = np.rot90(Z, k=1)
     T = np.rot90(T, k=1)
-    cs = np.rot90(cs, k=1)
+    vel = np.rot90(vel, k=1)
     # flip the array
     R = np.flip(R, axis=0)
     Z = np.flip(Z, axis=0)
     T = np.flip(T, axis=0)
-    cs = np.flip(cs, axis=0)
+    vel = np.flip(vel, axis=0)
 
-    return R, Z, T, cs, nz
+    return R, Z, T, vel, nz
 # ----------------------------------------------------------------------------------------------------------------------
 
 def process_timestep(ti, caseToProcess, folder, tsnap, GridsPerR, rmin, rmax, zmin, zmax, lw):
@@ -86,39 +86,61 @@ def process_timestep(ti, caseToProcess, folder, tsnap, GridsPerR, rmin, rmax, zm
         print(f"{name} Image present!")
         return
 
-    nr = int(GridsPerR * rmax)
-    R, Z, T, cs, nz = gettingfield(place, zmin, zmax, rmin, rmax, nr)
+    nr = int(GridsPerR * (rmax-rmin))
+    R, Z, T, vel, nz = gettingfield(place, zmin, zmax, rmin, rmax, nr)
     zminp, zmaxp, rminp, rmaxp = Z.min(), Z.max(), R.min(), R.max()
 
     # Plotting
     AxesLabel, TickLabel = 50, 20
-    fig, ax = plt.subplots()
-    fig.set_size_inches(19.20, 10.80)
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(24, 10.80))
 
-    ax.plot([0, 0], [zmin, zmax], '-.', color='grey', linewidth=lw)
-    ax.plot([-rmax, -rmax], [zmin, zmax], '-', color='black', linewidth=lw)
-    ax.plot([-rmax, rmax], [zmin, zmin], '-', color='black', linewidth=lw)
-    ax.plot([-rmax, rmax], [zmax, zmax], '-', color='black', linewidth=lw)
-    ax.plot([rmax, rmax], [zmin, zmax], '-', color='black', linewidth=lw)
+    # Plot temperature in ax1
+    ax1.plot([0, 0], [zmin, zmax], '-.', color='grey', linewidth=lw)
+    ax1.plot([-rmax, -rmax], [zmin, zmax], '-', color='black', linewidth=lw)
+    ax1.plot([-rmax, rmax], [zmin, zmin], '-', color='black', linewidth=lw)
+    ax1.plot([-rmax, rmax], [zmax, zmax], '-', color='black', linewidth=lw)
+    ax1.plot([rmax, rmax], [zmin, zmax], '-', color='black', linewidth=lw)
 
-    T = np.ma.masked_where(cs != 1.0, T)
-    cntrl1 = ax.imshow(T, cmap="coolwarm", interpolation='Bilinear', origin='lower', extent=[rminp, rmaxp, zminp, zmaxp], vmax=1.0, vmin=0.0)
+    cntrl1 = ax1.imshow(T, cmap="coolwarm", interpolation='Bilinear', origin='lower', extent=[rminp, rmaxp, zminp, zmaxp], vmax=1.0, vmin=0.0)
 
-    ax.set_aspect('equal')
-    ax.set_xlim(rmin, rmax)
-    ax.set_ylim(zmin, zmax)
-    ax.set_title(f'$t/\\tau$ = {t:4.3f}', fontsize=TickLabel)
+    ax1.set_aspect('equal')
+    ax1.set_xlim(rmin, rmax)
+    ax1.set_ylim(zmin, zmax)
+    ax1.set_title(f'Temperature, $t/\\tau$ = {t:4.3f}', fontsize=TickLabel)
+    ax1.axis('off')
 
-    l, b, w, h = ax.get_position().bounds
-    # Left colorbar
-    cb1 = fig.add_axes([l-0.04, b, 0.03, h])
-    c1 = plt.colorbar(cntrl1, cax=cb1, orientation='vertical')
-    c1.set_label(r'$T$', fontsize=TickLabel, labelpad=5)
+    # Plot velocity in ax2
+    ax2.plot([0, 0], [zmin, zmax], '-.', color='grey', linewidth=lw)
+    ax2.plot([-rmax, -rmax], [zmin, zmax], '-', color='black', linewidth=lw)
+    ax2.plot([-rmax, rmax], [zmin, zmin], '-', color='black', linewidth=lw)
+    ax2.plot([-rmax, rmax], [zmax, zmax], '-', color='black', linewidth=lw)
+    ax2.plot([rmax, rmax], [zmin, zmax], '-', color='black', linewidth=lw)
+
+    cntrl2 = ax2.imshow(vel, cmap="viridis", interpolation='Bilinear', origin='lower', extent=[rminp, rmaxp, zminp, zmaxp], vmax=10.0, vmin=0.0)
+
+    ax2.set_aspect('equal')
+    ax2.set_xlim(rmin, rmax)
+    ax2.set_ylim(zmin, zmax)
+    ax2.set_title(f'Velocity, $t/\\tau$ = {t:4.3f}', fontsize=TickLabel)
+    ax2.axis('off')
+
+    # Add colorbars
+    fig.subplots_adjust(wspace=0.3)
+    
+    # Left colorbar for temperature
+    cax1 = fig.add_axes([0.08, 0.15, 0.02, 0.7])
+    c1 = plt.colorbar(cntrl1, cax=cax1, orientation='vertical')
+    c1.set_label(r'$T$', fontsize=TickLabel, labelpad=-5)
     c1.ax.tick_params(labelsize=TickLabel)
-    c1.ax.yaxis.set_ticks_position('left')
-    c1.ax.yaxis.set_label_position('left')
     c1.ax.yaxis.set_major_formatter(StrMethodFormatter('{x:,.1f}'))
-    ax.axis('off')
+    
+    # Right colorbar for velocity
+    cax2 = fig.add_axes([0.93, 0.15, 0.02, 0.7])
+    c2 = plt.colorbar(cntrl2, cax=cax2, orientation='vertical')
+    c2.set_label(r'$|\vec{u}|$', fontsize=TickLabel, labelpad=5)
+    c2.ax.tick_params(labelsize=TickLabel)
+    c2.ax.yaxis.set_major_formatter(StrMethodFormatter('{x:,.2f}'))
+
     plt.savefig(name, bbox_inches="tight")
     plt.close()
 
@@ -127,14 +149,14 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--CPUs', type=int, default=mp.cpu_count(), help='Number of CPUs to use')
     parser.add_argument('--nGFS', type=int, default=100, help='Number of restart files to process')
-    parser.add_argument('--GridsPerR', type=int, default=64, help='Number of grids per R')
-    parser.add_argument('--ZMAX', type=float, default=4.0, help='Maximum Z value')
-    parser.add_argument('--RMAX', type=float, default=4.0, help='Maximum R value')
-    parser.add_argument('--ZMIN', type=float, default=-4.0, help='Minimum Z value')
-    parser.add_argument('--RMIN', type=float, default=-4.0, help='Minimum R value')
-    parser.add_argument('--tsnap', type=float, default=1.0, help='Time snap')
+    parser.add_argument('--GridsPerR', type=int, default=512, help='Number of grids per R')
+    parser.add_argument('--ZMAX', type=float, default=0.5, help='Maximum Z value')
+    parser.add_argument('--RMAX', type=float, default=0.5, help='Maximum R value')
+    parser.add_argument('--ZMIN', type=float, default=-0.5, help='Minimum Z value')
+    parser.add_argument('--RMIN', type=float, default=-0.5, help='Minimum R value')
+    parser.add_argument('--tsnap', type=float, default=0.1, help='Time snap')
     parser.add_argument('--caseToProcess', type=str, default='../testCases/2-Rayleigh-Benard', help='Case to process')  
-    parser.add_argument('--folderToSave', type=str, default='Video', help='Folder to save')
+    parser.add_argument('--folderToSave', type=str, default='2-Rayleigh-Benard', help='Folder to save')
     args = parser.parse_args()
 
     num_processes = args.CPUs

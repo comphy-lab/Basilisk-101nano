@@ -94,7 +94,7 @@ deps/
 **/*.mp4
 **/*.json
 **/*.bv
-**/*.png
+# **/*.png
 
 # some ai files
 **/CLAUDE.md
@@ -113,6 +113,7 @@ deps/
 **/2-2D_rot_cylinder_ink
 **/2-2D_rot_cylinder
 **/2-Rayleigh-Benard
+**/2-Rayleigh-Benard_AMR
 **/2-LidDrivenCavity-Bingham
 **/2-LidDrivenCavity-Bingham_QUES
 **/2-LidDrivenCavity-Newtonian-dieInjection
@@ -128,8 +129,10 @@ deps/
 **/4-BurstingBubbles-WithPolymers
 **/4-DropImpact-HB
 **/4-Taylor-Cluick-elatic
+**/2-LidDrivenCavity-Newtonian
 **/dump
 **/restart
+**/*.mp4
 
 **/getFacet
 **/getData

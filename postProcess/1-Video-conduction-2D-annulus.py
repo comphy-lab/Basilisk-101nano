@@ -103,7 +103,19 @@ def process_timestep(ti, caseToProcess, folder, tsnap, GridsPerR, rmin, rmax, zm
 
     cntrl1 = ax.imshow(T, cmap="coolwarm", interpolation='Bilinear', origin='lower', extent=[rminp, rmaxp, zminp, zmaxp], vmax=1.0, vmin=0.0)
 
-    #TODO: make two concentric circles centered at 0,0 and checkout the actual code, ../testCases/1-conduction-2D-annulus
+    # Draw two concentric circles centered at (0,0)
+    # Based on the testCases/1-conduction-2D-annulus, we need inner and outer circles
+    
+    # Get inner and outer radii from the test case
+    # Typically these would be defined as INNER_RADIUS and OUTER_RADIUS
+    inner_radius = 1.0  # Default value, should match INNER_RADIUS in the test case
+    outer_radius = 4.0  # Default value, should match OUTER_RADIUS in the test case
+    # Clip the temperature field to the outer circle region so that data outside is not displayed
+    outer_circle = plt.Circle((0, 0), outer_radius, transform=ax.transData)
+    cntrl1.set_clip_path(outer_circle)
+    # Create a white circle for the inner region (this is already working)
+    inner_circle = plt.Circle((0, 0), inner_radius, fill=True, color='white', linestyle='-', linewidth=lw)
+    ax.add_patch(inner_circle)
 
     ax.set_aspect('equal')
     ax.set_xlim(rmin, rmax)

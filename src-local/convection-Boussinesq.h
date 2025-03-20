@@ -51,7 +51,7 @@ These parameters can be modified by the user before initialization.
 */
 
 // Thermal diffusivity (default value, can be modified by the user)
-double kappa = 1.0e-2;
+double kappa = 1e0;
 
 // Gravitational acceleration (default value, can be modified by the user)
 double AccG = 1.0;
@@ -60,10 +60,8 @@ double AccG = 1.0;
 double beta = 1.0;
 
 // Reference temperature (default value, can be modified by the user)
-double T0 = 0.5;
+double T0 = 0.0;
 
-// Rayleigh number = g·β·ΔT·L³/(ν·κ), computed for reference
-double Ra = 0.0;
 
 /**
 ## Boundary conditions for temperature

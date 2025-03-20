@@ -60,7 +60,7 @@ int main() {
   
   // Boundary conditions
   T[top] = dirichlet(0.0);
-  T[left] = neumann(exp(-y*y)); // Gaussian flux profile where y is r, decays away from r=0
+  T[left] = neumann(4e0*exp(-y*y)); // Gaussian flux profile where y is r, decays away from r=0
   T[right] = dirichlet(0.);
   
   // Run simulation
