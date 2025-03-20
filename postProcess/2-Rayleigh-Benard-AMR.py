@@ -4,8 +4,7 @@
 # Physics of Fluids Department
 # Last updated: Mar 8, 2025
 
-# This code should be able to process: 1-conduction-2D.c and 1-conduction-2D-annulus.c.
-
+# This code processes Rayleigh-Benard convection simulations with Adaptive Mesh Refinement (AMR).
 import numpy as np
 import os
 import subprocess as sp
