@@ -16,7 +16,7 @@ char filename[80];
 int nx, ny, len;
 double xmin, ymin, xmax, ymax, Deltax, Deltay;
 
-scalar T[], vel[];
+scalar T[], vel[], lsave[];
 scalar * list = NULL;
 
 int main(int a, char const *arguments[])
@@ -26,15 +26,15 @@ int main(int a, char const *arguments[])
     fprintf(stderr, "Usage: %s <filename> <xmin> <ymin> <xmax> <ymax> <ny>\n", arguments[0]);
     return 1;
   }
+
   sprintf (filename, "%s", arguments[1]);
   xmin = atof(arguments[2]); ymin = atof(arguments[3]);
   xmax = atof(arguments[4]); ymax = atof(arguments[5]);
   ny = atoi(arguments[6]);
-  // ... rest of the code
-}
 
   list = list_add (list, T);
   list = list_add (list, vel);
+  list = list_add (list, lsave);
 
   /*
   Actual run and codes!
