@@ -5,6 +5,7 @@
 [![Last Commit](https://img.shields.io/github/last-commit/comphy-lab/Basilisk-101)](https://github.com/comphy-lab/Basilisk-101/commits/main)
 [![Course](https://img.shields.io/badge/Course-March%202025-blue)](https://comphy-lab.org/teaching/2025-Basilisk101-Madrid)
 [![Basilisk](https://img.shields.io/badge/Basilisk-Compatible-green)](http://basilisk.fr/)
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/comphy-lab/Basilisk-101?utm_source=oss&utm_medium=github&utm_campaign=comphy-lab%2FBasilisk-101&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 
 Repository for the Basilisk C course at Universidad Carlos III de Madrid (March 10-13, 2025).
 
