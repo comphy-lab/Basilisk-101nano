@@ -8,6 +8,7 @@ constant viscosity. This is a classic benchmark case in computational fluid dyna
 - Reynolds number: Re = ρUL/μ = 1/μ (with ρ=1, U=1, L=1)
 - We use μ = 1.0 by default (Re = 1)
 */
+
 #include "navier-stokes/centered.h"
 
 // Constants

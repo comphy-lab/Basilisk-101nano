@@ -11,19 +11,18 @@
 #include "poisson.h"
 
 vector u[];
-
-char filename[80];
+char filename[1000];
 int nx, ny, len;
 double xmin, ymin, xmax, ymax, Deltax, Deltay;
 
-scalar D2c[], vel[], psi[], omega[];
+scalar T[], vel[], psi[], omega[];
 scalar * list = NULL;
 
 int main(int a, char const *arguments[])
 {
   if (a != 7) {
-    fprintf(stderr, "Error: Expected 6 arguments\n");
-    fprintf(stderr, "Usage: %s <filename> <xmin> <ymin> <xmax> <ymax> <ny>\n", arguments[0]);
+    fprintf(ferr, "Error: Expected 6 arguments\n");
+    fprintf(ferr, "Usage: %s <filename> <xmin> <ymin> <xmax> <ymax> <ny>\n", arguments[0]);
     return 1;
   }
 
@@ -32,9 +31,14 @@ int main(int a, char const *arguments[])
   xmax = atof(arguments[4]); ymax = atof(arguments[5]);
   ny = atoi(arguments[6]);
 
-  list = list_add (list, D2c);
+  list = list_add (list, T);
   list = list_add (list, vel);
   list = list_add (list, psi);
+
+  /*
+  Actual run and codes!
+  */
+ restore (file = filename);
 
   // Top moving wall
   u.t[top] = dirichlet(1);
@@ -49,25 +53,7 @@ int main(int a, char const *arguments[])
   psi[left]   = dirichlet(0);
   psi[right]  = dirichlet(0);
 
-  /*
-  Actual run and codes!
-  */
-  restore (file = filename);
-
   foreach() {
-    double D11 = (u.y[0,1] - u.y[0,-1])/(2*Delta);
-    double D22 = (u.y[]/y);
-    double D33 = (u.x[1,0] - u.x[-1,0])/(2*Delta);
-    double D13 = 0.5*( (u.y[1,0] - u.y[-1,0] + u.x[0,1] - u.x[0,-1])/(2*Delta) );
-    double D2 = (sq(D11)+sq(D22)+sq(D33)+2.0*sq(D13));
-    D2c[] = D2;
-    
-    if (D2c[] > 0.){
-      D2c[] = log(D2c[])/log(10);
-    } else {
-      D2c[] = -10;
-    }
-
     vel[] = sqrt(sq(u.x[])+sq(u.y[]));
   }
 
@@ -113,4 +99,5 @@ int main(int a, char const *arguments[])
   fflush (fp);
   fclose (fp);
   matrix_free (field);
+
 }
