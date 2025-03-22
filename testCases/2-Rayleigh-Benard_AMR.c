@@ -28,7 +28,7 @@ double tsnap = 0.1;               // Time interval between snapshots
 double end = 10.0;                // End time for simulation
 
 // Scalar field for convergence check
-scalar un[], vn[];                // Previous velocity components
+scalar un[], vn[], lsave[];                // Previous velocity components
 #define NU (1e-2)
 const face vector muv[] = {NU, NU};  // Face-centered viscosity field
 #define MAXlevel 11
@@ -101,7 +101,9 @@ event adapt(i++){
   adapt_wavelet ((scalar *){T, u.x, u.y},
     (double[]){1e-3, 1e-2, 1e-2},
     MAXlevel, MINLEVEL);
-
+  foreach() {
+    lsave[] = level;
+  }
 }
 
 

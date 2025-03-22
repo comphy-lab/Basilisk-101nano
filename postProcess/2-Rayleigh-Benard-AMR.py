@@ -32,7 +32,7 @@ def gettingfield(filename, zmin, zmax, rmin, rmax, nr):
     temp1 = stderr.decode("utf-8")
     temp2 = temp1.split("\n")
     # print(temp2) #debugging
-    Rtemp, Ztemp, Ttemp, veltemp  = [],[],[],[]
+    Rtemp, Ztemp, Ttemp, veltemp, levelTemp = [],[],[],[],[]
 
     for n1 in range(len(temp2)):
         temp3 = temp2[n1].split(" ")
@@ -43,11 +43,13 @@ def gettingfield(filename, zmin, zmax, rmin, rmax, nr):
             Rtemp.append(float(temp3[1]))
             Ttemp.append(float(temp3[2]))
             veltemp.append(float(temp3[3]))
+            levelTemp.append(float(temp3[4]))
 
     R = np.asarray(Rtemp)
     Z = np.asarray(Ztemp)
     T = np.asarray(Ttemp)
     vel = np.asarray(veltemp)
+    level = np.asarray(levelTemp)
     nz = int(len(Z)/nr)
 
     # print("nr is %d %d" % (nr, len(R))) # debugging
@@ -57,19 +59,20 @@ def gettingfield(filename, zmin, zmax, rmin, rmax, nr):
     Z.resize((nz, nr))
     T.resize((nz, nr))
     vel.resize((nz, nr))
-
+    level.resize((nz, nr))
     # rotate by 270 degrees
     R = np.rot90(R, k=1)
     Z = np.rot90(Z, k=1)
     T = np.rot90(T, k=1)
     vel = np.rot90(vel, k=1)
+    level = np.rot90(level, k=1)
     # flip the array
     R = np.flip(R, axis=0)
     Z = np.flip(Z, axis=0)
     T = np.flip(T, axis=0)
     vel = np.flip(vel, axis=0)
-
-    return R, Z, T, vel, nz
+    level = np.flip(level, axis=0)
+    return R, Z, T, vel, level, nz
 # ----------------------------------------------------------------------------------------------------------------------
 
 def process_timestep(ti, caseToProcess, folder, tsnap, GridsPerR, rmin, rmax, zmin, zmax, lw):
@@ -86,12 +89,12 @@ def process_timestep(ti, caseToProcess, folder, tsnap, GridsPerR, rmin, rmax, zm
         return
 
     nr = int(GridsPerR * (rmax-rmin))
-    R, Z, T, vel, nz = gettingfield(place, zmin, zmax, rmin, rmax, nr)
+    R, Z, T, vel, level, nz = gettingfield(place, zmin, zmax, rmin, rmax, nr)
     zminp, zmaxp, rminp, rmaxp = Z.min(), Z.max(), R.min(), R.max()
 
     # Plotting
     AxesLabel, TickLabel = 50, 20
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(24, 10.80))
+    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(36, 10.80))
 
     # Plot temperature in ax1
     ax1.plot([0, 0], [zmin, zmax], '-.', color='grey', linewidth=lw)
@@ -123,22 +126,45 @@ def process_timestep(ti, caseToProcess, folder, tsnap, GridsPerR, rmin, rmax, zm
     ax2.set_title(f'Velocity, $t/\\tau$ = {t:4.3f}', fontsize=TickLabel)
     ax2.axis('off')
 
-    # Add colorbars
-    fig.subplots_adjust(wspace=0.3)
+    # Plot level in ax3
+    ax3.plot([0, 0], [zmin, zmax], '-.', color='grey', linewidth=lw)
+    ax3.plot([-rmax, -rmax], [zmin, zmax], '-', color='black', linewidth=lw)
+    ax3.plot([-rmax, rmax], [zmin, zmin], '-', color='black', linewidth=lw)
+    ax3.plot([-rmax, rmax], [zmax, zmax], '-', color='black', linewidth=lw)
+    ax3.plot([rmax, rmax], [zmin, zmax], '-', color='black', linewidth=lw)
+
+    cntrl3 = ax3.imshow(level, cmap=custom_cmap, interpolation='Bilinear', origin='lower', extent=[rminp, rmaxp, zminp, zmaxp], vmax=10.0, vmin=7.0)
+
+    ax3.set_aspect('equal')
+    ax3.set_xlim(rmin, rmax)
+    ax3.set_ylim(zmin, zmax)
+    ax3.set_title(f'Grid Level, $t/\\tau$ = {t:4.3f}', fontsize=TickLabel)
+    ax3.axis('off')
+
+    # Adjust subplot spacing
+    fig.subplots_adjust(wspace=0.1, bottom=0.2)
     
-    # Left colorbar for temperature
-    cax1 = fig.add_axes([0.08, 0.15, 0.02, 0.7])
-    c1 = plt.colorbar(cntrl1, cax=cax1, orientation='vertical')
-    c1.set_label(r'$T$', fontsize=TickLabel, labelpad=-5)
+    # Add horizontal colorbars below the subplots
+    # Temperature colorbar
+    cax1 = fig.add_axes([0.125, 0.1, 0.2, 0.02])
+    c1 = plt.colorbar(cntrl1, cax=cax1, orientation='horizontal')
+    c1.set_label(r'$T$', fontsize=TickLabel)
     c1.ax.tick_params(labelsize=TickLabel)
-    c1.ax.yaxis.set_major_formatter(StrMethodFormatter('{x:,.1f}'))
+    c1.ax.xaxis.set_major_formatter(StrMethodFormatter('{x:,.1f}'))
     
-    # Right colorbar for velocity
-    cax2 = fig.add_axes([0.93, 0.15, 0.02, 0.7])
-    c2 = plt.colorbar(cntrl2, cax=cax2, orientation='vertical')
-    c2.set_label(r'$|\vec{u}|$', fontsize=TickLabel, labelpad=5)
+    # Velocity colorbar
+    cax2 = fig.add_axes([0.4, 0.1, 0.2, 0.02])
+    c2 = plt.colorbar(cntrl2, cax=cax2, orientation='horizontal')
+    c2.set_label(r'$|\vec{u}|$', fontsize=TickLabel)
     c2.ax.tick_params(labelsize=TickLabel)
-    c2.ax.yaxis.set_major_formatter(StrMethodFormatter('{x:,.2f}'))
+    c2.ax.xaxis.set_major_formatter(StrMethodFormatter('{x:,.2f}'))
+
+    # Level colorbar
+    cax3 = fig.add_axes([0.675, 0.1, 0.2, 0.02])
+    c3 = plt.colorbar(cntrl3, cax=cax3, orientation='horizontal', ticks=[7, 8, 9, 10])
+    c3.set_label('Grid Level', fontsize=TickLabel)
+    c3.ax.tick_params(labelsize=TickLabel)
+    c3.ax.xaxis.set_major_formatter(plt.FormatStrFormatter('%d'))
 
     plt.savefig(name, bbox_inches="tight")
     plt.close()
@@ -154,8 +180,8 @@ def main():
     parser.add_argument('--ZMIN', type=float, default=-0.5, help='Minimum Z value')
     parser.add_argument('--RMIN', type=float, default=-0.5, help='Minimum R value')
     parser.add_argument('--tsnap', type=float, default=0.1, help='Time snap')
-    parser.add_argument('--caseToProcess', type=str, default='../testCases/2-Rayleigh-Benard', help='Case to process')  
-    parser.add_argument('--folderToSave', type=str, default='2-Rayleigh-Benard', help='Folder to save')
+    parser.add_argument('--caseToProcess', type=str, default='../testCases/2-Rayleigh-Benard_AMR', help='Case to process')  
+    parser.add_argument('--folderToSave', type=str, default='2-Rayleigh-Benard_AMR', help='Folder to save')
     args = parser.parse_args()
 
     num_processes = args.CPUs

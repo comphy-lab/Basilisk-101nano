@@ -22,7 +22,7 @@
 | [2-Poiseuille-flow-Newtonian.c](../testCases/2-Poiseuille-flow-Newtonian.c) | [2-casesWithNS.ipynb](2-casesWithNS.ipynb) | ⏳ In Progress |
 | [2-Poiseuille-flow-Bingham.c](../testCases/2-Poiseuille-flow-Bingham.c) | [2-casesWithNS.ipynb](2-casesWithNS.ipynb) | ⏳ In Progress |
 | [2-2D_rot_cylinder.c](../testCases/2-2D_rot_cylinder.c) | [2-casesWithNS.ipynb](2-casesWithNS.ipynb) | [✅ Complete](#2-2d_rot_cylinder) |
-| [2-2D_rot_cylinder_ink.c](../testCases/2-2D_rot_cylinder_ink.c) | [Video-generic.py](Video-generic.py) | ⏳ In Progress |
+| [2-2D_rot_cylinder_ink.c](../testCases/2-2D_rot_cylinder_ink.c) | [2-2D_rot_cylinder_ink.py](2-2D_rot_cylinder_ink.py) | [⏳ In Progress](#2-2d_rot_cylinder_ink) |
 | [2-LidDrivenCavity-Newtonian.c](../testCases/2-LidDrivenCavity-Newtonian.c) | [getData-LidDriven.c](getData-LidDriven.c) | ⏳ In Progress |
 | [2-LidDrivenCavity-Newtonian-dieInjection.c](../testCases/2-LidDrivenCavity-Newtonian-dieInjection.c) | [getData-LidDriven.c](getData-LidDriven.c) | ⏳ In Progress |
 | [2-LidDrivenCavity-Bingham.c](../testCases/2-LidDrivenCavity-Bingham.c) | [2-LidDrivenCavity-Bingham.ipynb](2-LidDrivenCavity-Bingham.ipynb) | [✅ Complete](#2-liddrivencavity-bingham-data) |
@@ -87,7 +87,7 @@ Heat flux on the top wall is modeled as a Gaussian heat flux.
 ![](img/2-2D_rot_cylinder.png)
 
 ## 2-2D_rot_cylinder_ink
-(Post-processing script in progress)
+![fail](img/2-2D_rot_cylinder-ink.png)
 
 ## 2-LidDrivenCavity-Newtonian
 (Post-processing script in progress)

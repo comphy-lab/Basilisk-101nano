@@ -132,7 +132,8 @@ deps/
 **/2-LidDrivenCavity-Newtonian
 **/dump
 **/restart
-**/*.mp4
+**/getData-Rayleigh-Benard
+**/getData-2D_rot_cylinder_ink
 
 **/getFacet
 **/getData
