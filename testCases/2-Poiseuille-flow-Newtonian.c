@@ -24,6 +24,7 @@ Where $h$ is the height of the domain (1.0 in this case).
 
 # Code
 */
+
 #include "navier-stokes/centered.h"
 
 // Global parameters
@@ -35,7 +36,7 @@ int max_iter = 1e4;       // Maximum iterations
 int main(int argc, char const *argv[])
 {
   if (argc < 2) {
-    fprintf(stderr, "Usage: %s filename [mu_0]\n", argv[0]);
+    fprintf(stderr, "Usage: %s filename\n", argv[0]);
     return 1;
   }
   
@@ -52,11 +53,6 @@ int main(int argc, char const *argv[])
 /**
  For Newtonian fluid, we only need to set the constant viscosity $\mu_0$
 */
-  // Parse command line arguments if provided
-  if (argc >= 3) {
-    mu_0 = atof(argv[2]);
-  }
-
   // Set boundary conditions
   // Right-left boundaries are periodic
   periodic(right);
