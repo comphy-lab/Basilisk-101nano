@@ -134,6 +134,7 @@ deps/
 **/restart
 **/getData-Rayleigh-Benard
 **/getData-2D_rot_cylinder_ink
+**/2-Poiseuille-flow-Newtonian
 
 **/getFacet
 **/getData
@@ -144,5 +145,5 @@ deps/
 !*.c
 !*.h
 !*.sbatch
-postProcess/getData-generic
-postProcess/getData-LidDriven-Line
+**/getData-generic
+**/getData-Line
