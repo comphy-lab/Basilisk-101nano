@@ -20,6 +20,12 @@ scalar * list = NULL;
 
 int main(int a, char const *arguments[])
 {
+  if (a != 7) {
+    fprintf(stderr, "Error: Expected 6 arguments\n");
+    fprintf(stderr, "Usage: %s <filename> <xmin> <ymin> <xmax> <ymax> <ny>\n", arguments[0]);
+    return 1;
+  }
+
   sprintf (filename, "%s", arguments[1]);
   xmin = atof(arguments[2]); ymin = atof(arguments[3]);
   xmax = atof(arguments[4]); ymax = atof(arguments[5]);
