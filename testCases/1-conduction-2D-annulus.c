@@ -1,18 +1,22 @@
 /**
- * 2D Transient Heat Conduction Solver in an Annulus
- * 
- * This program solves the transient heat conduction equation in an annular domain:
- * 
- * \frac{\partial T}{\partial t} = \nabla^2 T
- * 
- * Subject to boundary conditions:
- * T = 1 on the inner boundary (r = 1)
- * T = 0 on the outer boundary (r = 4)
- * 
- * We use the embedded boundary method to define the annular domain.
+ 
+ # 2D Transient Heat Conduction Solver in an Annulus
+ 
+ This program solves the transient heat conduction equation in an annular domain:
+ 
+ $$
+ \frac{\partial T}{\partial t} = \nabla^2 T
+ $$
+ 
+ ## Subject to boundary conditions:
+
+  - T = 1 on the inner boundary (r = 1)
+  - T = 0 on the outer boundary (r = 4)
+ 
+ We use the embedded boundary method to define the annular domain.
 */
 
-/* Include necessary headers in the correct order for Basilisk */
+// Include necessary headers in the correct order for Basilisk
 #include "run.h"
 #include "embed.h"
 #include "diffusion.h"
@@ -55,16 +59,16 @@ int main() {
 }
 
 /**
- * Initialize temperature field and boundary conditions
- */
+ ## Initialize temperature field and boundary conditions
+*/
 event init (t = 0) {
   if (!restore(file = dumpFile)) {
-      /**
-   * Define the geometry of the embedded boundary as an annulus:
-   * - outer circle: sq(OUTER_RADIUS) - sq(x) - sq(y) (positive inside circle of radius 4)
-   * - inner circle: sq(INNER_RADIUS) - sq(x) - sq(y) (positive inside circle of radius 1)
-   * - difference gives the annular region (positive inside the annulus)
-   */
+  /**
+  Define the geometry of the embedded boundary as an annulus:
+    - outer circle: sq(OUTER_RADIUS) - sq(x) - sq(y) (positive inside circle of radius 4)
+    - inner circle: sq(INNER_RADIUS) - sq(x) - sq(y) (positive inside circle of radius 1)
+    - difference gives the annular region (positive inside the annulus)
+  */
   solid (cs, fs, difference (sq(OUTER_RADIUS) - sq(x) - sq(y),
                            sq(INNER_RADIUS) - sq(x) - sq(y)));
     
@@ -76,8 +80,8 @@ event init (t = 0) {
 }
 
 /**
- * Time integration using implicit diffusion solver
- */
+ ## Time integration using implicit diffusion solver
+*/
 event integration (i++) {
   // Get timestep for this iteration
   double dt = dtnext(DT);
@@ -102,8 +106,8 @@ event adapt(i++){
 }
 
 /**
- * Save snapshots at regular intervals
- */
+ ## Save snapshots at regular intervals
+*/
 event writingFiles (t = 0.0; t += tsnap; t < tmax+tsnap) {
   dump (file = dumpFile);
   sprintf (nameOut, "intermediate/snapshot-%5.4f", t);
@@ -111,8 +115,9 @@ event writingFiles (t = 0.0; t += tsnap; t < tmax+tsnap) {
 }
 
 /** 
- * Write logs every timestep about the convergence of the diffusion solver
- */
+ ## Log writing
+ Write logs every timestep about the convergence of the diffusion solver
+*/
 event logWriting (i++) {
   if (i == 0) {
     fprintf (stderr, "i t dt mgd.i\n");

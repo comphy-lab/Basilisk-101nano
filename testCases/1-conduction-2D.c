@@ -1,20 +1,29 @@
 /**
- * 2D Transient Heat Conduction Solver
- * 
- * This program solves the transient heat conduction equation in two dimensions:
- * 
- * \frac{\partial T}{\partial t} = \nabla^2 T
- * 
- * Subject to boundary conditions:
- * T = 1 on the top boundary
- * T = 0 on the bottom, left, and right boundaries
- * 
- * Initial condition:
- * T = 0 everywhere
- * To use make file, do CFLAGS=-DDISPLAY=-1 make 1-conduction-2D.tst
+ # 2D Transient Heat Conduction Solver
+ 
+ This program solves the transient heat conduction equation in two dimensions:
+ 
+ $$
+ \frac{\partial T}{\partial t} = \nabla^2 T
+ $$
+ 
+ ## Subject to boundary conditions:
+
+  - T = 1 on the top boundary
+  - T = 0 on the bottom, left, and right boundaries
+ 
+ ## Initial condition:
+  - T = 0 everywhere
+
+ ## To use make file, do
+
+ ```bash 
+ CFLAGS=-DDISPLAY=-1 make 1-conduction-2D.tst
+ ```
+
 */
 
-/* Include necessary headers in the correct order for Basilisk */
+// Include necessary headers in the correct order for Basilisk
 #include "run.h"
 #include "diffusion.h"
 
@@ -58,10 +67,10 @@ int main() {
 }
 
 /**
- * Initialize temperature field
- * 
- * Sets up a "Dirac delta" approximated by a thin rectangle
- * centered at x=0 with total integral = 1.
+ ## Initialize temperature field
+ 
+ Sets up a "Dirac delta" approximated by a thin rectangle
+ centered at x=0 with total integral = 1.
  */
 event init (t = 0) {
   foreach()
@@ -69,7 +78,7 @@ event init (t = 0) {
 }
 
 /**
- * Time integration using implicit diffusion solver
+ ## Time integration using implicit diffusion solver
  */
 event integration (i++) {
   // Get timestep for this iteration
@@ -84,7 +93,7 @@ event adapt(i++){
 }
 
 /**
- * Save snapshots at regular intervals
+ ## Save snapshots at regular intervals
  */
 event writingFiles (t = 0.0; t += tsnap; t < tmax+tsnap) {
   dump (file = dumpFile);
@@ -93,8 +102,9 @@ event writingFiles (t = 0.0; t += tsnap; t < tmax+tsnap) {
 }
 
 /** 
- * Write logs every timestep about the convergence of the diffusion solver
- * 
+ ## Log writing
+ 
+ Write logs every timestep about the convergence of the diffusion solver
  */
 event logWriting (i++) {
 
