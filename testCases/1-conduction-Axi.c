@@ -1,31 +1,38 @@
 /**
- * Axisymmetric Transient Heat Conduction Solver
- * 
- * This program solves the transient heat conduction equation in an axisymmetric domain:
- * 
- * \frac{\partial T}{\partial t} = \nabla^2 T
- * 
- * In cylindrical coordinates with axisymmetry, the Laplacian becomes:
- * \nabla^2 T = \frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial T}{\partial r}) + \frac{\partial^2 T}{\partial z^2}
- * 
- * Domain: 
- * - Length: 10.0 units
- * - Centered at x=0 (left boundary at -5.0, right boundary at 5.0)
- * - Grid resolution: 128 cells (2^7)
- * 
- * Subject to boundary conditions:
- * - Top: T = 0 (Dirichlet)
- * - Left (r=0): Gaussian heat flux profile exp(-y²) (Neumann)
- * - Right: T = 0 (Dirichlet)
- * 
- * Initial condition:
- * - T = 0 everywhere
- * 
- * The simulation uses an implicit diffusion solver, allowing for larger timesteps
- * compared to explicit methods.
+ ## Axisymmetric Transient Heat Conduction Solver
+ 
+ This program solves the transient heat conduction equation in an axisymmetric domain:
+ 
+ $$
+ \frac{\partial T}{\partial t} = \nabla^2 T
+ $$
+ 
+ In cylindrical coordinates with axisymmetry, the Laplacian becomes:
+ 
+ $$
+ \nabla^2 T = \frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial T}{\partial r}) + \frac{\partial^2 T}{\partial z^2}
+ $$
+ 
+ ## Domain: 
+
+  - Length: 10.0 units
+  - Centered at x=0 (left boundary at -5.0, right boundary at 5.0)
+  - Grid resolution: 128 cells (2^7)
+ 
+ ## Subject to boundary conditions:
+ 
+  - Top: T = 0 (Dirichlet)
+  - Left (r=0): Gaussian heat flux profile exp(-y²) (Neumann)
+  - Right: T = 0 (Dirichlet)
+ 
+ ## Initial condition:
+ 
+  - T = 0 everywhere
+  
+ The simulation uses an implicit diffusion solver, allowing for larger timesteps compared to explicit methods.
 */
 
-/* Include necessary headers in the correct order for Basilisk */
+// Include necessary headers in the correct order for Basilisk
 #include "axi.h"
 #include "run.h"
 #include "diffusion.h"
@@ -68,10 +75,10 @@ int main() {
 }
 
 /**
- * Initialize temperature field
- * 
- * Sets the initial temperature field to zero throughout the domain.
- * The Basilisk event system will automatically call this function at t=0.
+ ## Initialize temperature field
+ 
+ Sets the initial temperature field to zero throughout the domain.
+ The Basilisk event system will automatically call this function at t=0.
  */
 event init (t = 0) {
   foreach()
@@ -79,19 +86,21 @@ event init (t = 0) {
 }
 
 /**
- * Time integration using implicit diffusion solver
- * 
- * This event performs the time integration for each timestep using
- * the implicit diffusion solver from diffusion.h. The solver handles
- * the axisymmetric formulation automatically through the axi.h module.
- * 
- * The diffusion coefficient D is set to 1.0 across the entire domain,
- * which corresponds to solving the standard heat equation:
- * ∂T/∂t = ∇²T
- * 
- * The solver uses multigrid acceleration for improved convergence.
- * Convergence statistics are stored in the mgd variable for logging.
- */
+ ## Time integration using implicit diffusion solver
+ 
+ This event performs the time integration for each timestep using
+ the implicit diffusion solver from diffusion.h. The solver handles
+ the axisymmetric formulation automatically through the axi.h module.
+ 
+ The diffusion coefficient D is set to 1.0 across the entire domain,
+ which corresponds to solving the standard heat equation:
+ 
+ $$
+ \frac{\partial T}{\partial t} = \nabla^2 T
+ $$
+ 
+ The solver uses multigrid acceleration for improved convergence. Convergence statistics are stored in the mgd variable for logging.
+*/
 event integration (i++) {
   // Get timestep for this iteration
   double dt = dtnext(DT);
@@ -106,18 +115,18 @@ event integration (i++) {
 }
 
 /**
- * Save snapshots at regular intervals
- * 
- * This event saves simulation data at regular time intervals (tsnap)
- * throughout the simulation until the maximum time (tmax) is reached.
- * 
- * Two types of files are generated:
- * 1. A single restart file named "restart" that gets overwritten at each interval
- * 2. Time-specific snapshots with timestamps stored in the "intermediate" directory
- * 
- * These snapshot files contain the complete simulation state and can be used
- * for visualization or to restart the simulation from a specific time.
- */
+ ## Save snapshots at regular intervals
+ 
+ This event saves simulation data at regular time intervals (tsnap)
+ throughout the simulation until the maximum time (tmax) is reached.
+ 
+ Two types of files are generated:
+ 1. A single restart file named "restart" that gets overwritten at each interval
+ 2. Time-specific snapshots with timestamps stored in the "intermediate" directory
+ 
+ These snapshot files contain the complete simulation state and can be used
+ for visualization or to restart the simulation from a specific time.
+*/
 event writingFiles (t = 0.0; t += tsnap; t < tmax+tsnap) {
   dump (file = dumpFile);
   sprintf (nameOut, "intermediate/snapshot-%5.4f", t);
@@ -125,23 +134,25 @@ event writingFiles (t = 0.0; t += tsnap; t < tmax+tsnap) {
 }
 
 /** 
- * Write logs for monitoring simulation progress
- * 
- * This event logs simulation metrics at every timestep to both:
- * 1. Standard error (console output)
- * 2. A log file named "logData.dat"
- * 
- * For each timestep, it records:
- * - i: The timestep number
- * - t: The current simulation time
- * - dt: The size of the current timestep
- * - mgd.i: Number of iterations required by the diffusion solver
- * 
- * This information is valuable for:
- * - Monitoring simulation progress
- * - Verifying solver convergence
- * - Debugging numerical issues
- * - Performance analysis
+ ## Write logs for monitoring simulation progress
+ 
+ This event logs simulation metrics at every timestep to both:
+ 1. Standard error (console output)
+ 2. A log file named "logData.dat"
+ 
+ For each timestep, it records:
+
+ - i: The timestep number
+ - t: The current simulation time
+ - dt: The size of the current timestep
+ - mgd.i: Number of iterations required by the diffusion solver
+ 
+ This information is valuable for:
+ 
+ - Monitoring simulation progress
+ - Verifying solver convergence
+ - Debugging numerical issues
+ - Performance analysis
  */
 event logWriting (i++) {
 

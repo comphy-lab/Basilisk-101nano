@@ -1,24 +1,27 @@
 /**
- * # 1D Steady Heat Conduction Solver (Basilisk version)
- * 
- * This program solves the heat conduction equation to reach steady state:
- * 
- * \frac{\partial T}{\partial t} = \frac{\partial^2 T}{\partial x^2}
- * 
- * Subject to Dirichlet boundary conditions:
- * - T(0) = 0
- * - T(1) = 1
- * 
- * The steady-state analytical solution is the linear profile T(x) = x.
- */
+ ## 1D Steady Heat Conduction Solver (Basilisk version)
+ 
+ This program solves the heat conduction equation to reach steady state:
+ 
+ $$
+ \frac{\partial T}{\partial t} = \frac{\partial^2 T}{\partial x^2}
+ $$
+ 
+ ## Subject to Dirichlet boundary conditions:
+ 
+ - T(0) = 0
+ - T(1) = 1
+ 
+ The steady-state analytical solution is the linear profile $T(x) = x$.
+*/
 
-#include "grid/cartesian1D.h"
-#include "run.h"
+#include "grid/cartesian1D.h" // 1D grid
+#include "run.h" // utility functions for running the simulation
 
 // Declare scalar field for temperature
 scalar T[];
-T[left] = dirichlet(0.0);
-T[right] = dirichlet(1.0);
+T[left] = dirichlet(0.0); // left boundary
+T[right] = dirichlet(1.0); // right boundary
 
 int main() {
   // Domain setup
@@ -40,18 +43,18 @@ int main() {
 }
 
 /**
- * Initialize temperature field
- * 
- * Starting with zero temperature everywhere, letting the boundary
- * conditions drive the evolution toward steady state.
- */
+ ## Initialize temperature field
+ 
+ Starting with zero temperature everywhere, letting the boundary
+ conditions drive the evolution toward steady state.
+*/
 event init (t = 0) {
   foreach()
     T[] = 0.0; 
 }
 
 /**
- * Time integration using explicit finite volume method
+ ## Time integration using explicit finite volume method
  */
 event marching (i++) {
   foreach() {
@@ -61,7 +64,7 @@ event marching (i++) {
 }
 
 /**
- * Monitor convergence to steady state
+ ## Monitor convergence to steady state
  */
 event testingConvergence (i++; i < 100000) {
   double error = 0.0;
@@ -84,7 +87,7 @@ event testingConvergence (i++; i < 100000) {
 }
 
 /**
- * Save final results and comparison with analytical solution
+ ## Save final results and comparison with analytical solution
  */
 event end (t = end) {
   char filename[100];

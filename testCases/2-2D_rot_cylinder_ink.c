@@ -1,13 +1,13 @@
 /**
- * # 2D Rotating Cylindrical Annulus with Dye Injection
- * 
- * This simulation models flow in an annular region between two concentric cylinders,
- * with the inner cylinder rotating at a constant angular velocity. A dye is injected
- * to visualize the flow patterns. The simulation also includes a time reversal event
- * to study mixing and unmixing phenomena.
- * 
- * Contributed by [Paula Magrinya Aguilo](https://github.com/Pmagrinya)
- */
+ ## 2D Rotating Cylindrical Annulus with Dye Injection
+ 
+ This simulation models flow in an annular region between two concentric cylinders,
+ with the inner cylinder rotating at a constant angular velocity. A dye is injected
+ to visualize the flow patterns. The simulation also includes a time reversal event
+ to study mixing and unmixing phenomena.
+ 
+ Contributed by [Paula Magrinya Aguilo](https://github.com/Pmagrinya)
+*/
 
 #include "embed.h"               // Embedded boundary module for complex geometries
 #include "navier-stokes/centered.h" // Centered finite volume solver for Navier-Stokes
@@ -66,12 +66,12 @@ int main() {
 }
 
 /**
- * Initialization event (t=0)
- * 
- * This event defines the geometry of the cylindrical annulus using the embedded boundary
- * method and sets boundary conditions for the velocity field.
- * The initial condition imposes rigid body rotation on the inner cylinder.
- */
+ ## Initialization event (t=0)
+
+ This event defines the geometry of the cylindrical annulus using the embedded boundary
+ method and sets boundary conditions for the velocity field.
+ The initial condition imposes rigid body rotation on the inner cylinder.
+*/
 event init (t = 0) {
     mu = fm;
     // Initialize velocity field (will be overwritten by boundary conditions)
@@ -89,11 +89,11 @@ event init (t = 0) {
 }
 
 /**
- * Output event for writing simulation data
- * 
- * This event saves the full simulation state for restart capability
- * and creates snapshots at regular intervals for visualization.
- */
+ ## Output event for writing simulation data
+
+ This event saves the full simulation state for restart capability
+ and creates snapshots at regular intervals for visualization.
+*/
 event writingFiles (t = 0.0; t += tsnap; t < tmax+tsnap) {
   dump (file = dumpFile);
   sprintf (nameOut, "intermediate/snapshot-%5.4f", t);
@@ -101,11 +101,11 @@ event writingFiles (t = 0.0; t += tsnap; t < tmax+tsnap) {
 }
 
 /**
- * Logging event for monitoring simulation progress
- * 
- * Records iteration number, simulation time, and timestep size
- * both to standard error and to a log file for post-processing.
- */
+ ## Logging event for monitoring simulation progress
+
+ Records iteration number, simulation time, and timestep size
+ both to standard error and to a log file for post-processing.
+*/
 event logWriting (i++) {
   if (i == 0) {
     fprintf (stderr, "i t dt\n");
@@ -128,12 +128,12 @@ event adapt(i++) {
 
 
 /**
- * Time reversal event
- * 
- * At t=1, this event reverses the direction of rotation of the inner cylinder.
- * This can be used to study flow reversibility and mixing properties.
- * The velocity boundary conditions are flipped to (y, -x) for clockwise rotation.
- */
+ ## Time reversal event
+
+ At t=1, this event reverses the direction of rotation of the inner cylinder.
+ This can be used to study flow reversibility and mixing properties.
+ The velocity boundary conditions are flipped to (y, -x) for clockwise rotation.
+*/
 event timeReversal(t=0.5*tmax){
     u.n[embed] = dirichlet (x*x + y*y > sq(OUTER_RADIUS-0.1) ? 0. : y);
     u.t[embed] = dirichlet (x*x + y*y > sq(OUTER_RADIUS-0.1) ? 0. :  -x);

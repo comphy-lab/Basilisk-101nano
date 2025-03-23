@@ -1,17 +1,22 @@
 /**
- * # 1D Transient Heat Conduction Solver (Basilisk version)
- * 
- * This program solves the transient heat conduction equation in one dimension:
- * 
- * \frac{\partial T}{\partial t} = \frac{\partial^2 T}{\partial x^2}
- * 
- * Subject to no-flux boundary conditions on both ends of the domain.
- * Initial condition is a "Dirac delta" approximated by a thin rectangle
- * centered at x=0 with total integral = 1.
- * 
- * The exact self-similar analytical solution is:
- * T(x,t) = \frac{1}{2\sqrt{\pi t}}e^{-x^2/4t}
- */
+ ## 1D Transient Heat Conduction Solver (Basilisk version)
+ 
+ This program solves the transient heat conduction equation in one dimension:
+ 
+ $$
+ \frac{\partial T}{\partial t} = \frac{\partial^2 T}{\partial x^2}
+ $$
+ 
+ - Subject to no-flux boundary conditions on both ends of the domain.
+ - Initial condition is a "Dirac delta" approximated by a thin rectangle
+ centered at $x=0$ with total integral = 1.
+ 
+ The exact self-similar analytical solution is:
+ 
+ $$
+ T(x,t) = \frac{1}{2\sqrt{\pi t}}e^{-\frac{x^2}{4t}}
+ $$
+*/
 
 #include "grid/cartesian1D.h"
 #include "run.h"
@@ -45,11 +50,11 @@ int main() {
 }
 
 /**
- * Initialize temperature field
- * 
- * Sets up a "Dirac delta" approximated by a thin rectangle
- * centered at x=0 with total integral = 1.
- */
+ ## Initialize temperature field
+
+ - Sets up a `Dirac delta` approximated by a thin rectangle
+ - centered at $x=0$ with total integral = 1.
+*/
 event init (t = 0) {
   foreach()
     T[] = (fabs(x) < EPS) ? 1.0/EPS/2.0 : 0.0; 
@@ -57,8 +62,8 @@ event init (t = 0) {
 }
 
 /**
- * Time integration using explicit finite volume method
- */
+ ## Time integration using explicit finite volume method
+*/
 event integration (i++) {
   // Get timestep for this iteration
   double dt = dtnext(DT);
@@ -84,8 +89,8 @@ event integration (i++) {
 }
 
 /**
- * Save snapshots at regular intervals
- */
+ ## Save snapshots at regular intervals
+*/
 event writingFiles (t += tsnap; t < tmax+tsnap) {
   char filename[100];
   sprintf(filename, "intermediate/snapshot-%5.4f.csv", t);  
@@ -99,7 +104,7 @@ event writingFiles (t += tsnap; t < tmax+tsnap) {
 }
 
 /**
- * Save final results and comparison with analytical solution
+ ## Save final results and comparison with analytical solution
  */
 event end (t = end) {
   char filename[100];

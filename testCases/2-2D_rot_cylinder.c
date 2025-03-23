@@ -1,5 +1,5 @@
 /**
-# 2D Rotating Cylindrical Annulus Simulation
+## 2D Rotating Cylindrical Annulus Simulation
  
 Simulates the flow between two concentric cylinders where the inner cylinder rotates.
 This is a classic problem in fluid dynamics known as Taylor-Couette flow.
@@ -50,15 +50,11 @@ int main() {
 }
 
 /**
- * En t=0, definimos la geometría del cilindro y su condición de contorno.
- * At t = 0, we define the cylinder geometry and its boundary condition.
- * 
- * This function initializes:
- * 1. The viscosity field
- * 2. The cylindrical annulus geometry using embedded boundaries
- * 3. Boundary conditions for normal and tangential velocities:
- *    - Inner cylinder rotates with angular velocity OMEGA
- *    - Outer cylinder is stationary
+ ## Initialization event (t=0)
+
+ This event defines the geometry of the cylindrical annulus using the embedded boundary
+ method and sets boundary conditions for the velocity field.
+ The initial condition imposes rigid body rotation on the inner cylinder.
  */
 event init (t = 0) {
     mu = fm;               // Set viscosity field for the fluid domain
@@ -73,11 +69,11 @@ event init (t = 0) {
 }
 
 /**
- * Creates simulation snapshots at regular time intervals
- * 
- * This saves:
- * 1. A restart file for resuming the simulation
- * 2. Snapshot files in the 'intermediate' directory for visualization and analysis
+ ## Creates simulation snapshots at regular time intervals
+ 
+ This saves:
+ 1. A restart file for resuming the simulation
+ 2. Snapshot files in the 'intermediate' directory for visualization and analysis
  */
 event writingFiles (t = 0.0; t += tsnap; t < tmax+tsnap) {
   dump (file = dumpFile);
@@ -86,15 +82,14 @@ event writingFiles (t = 0.0; t += tsnap; t < tmax+tsnap) {
 }
 
 /**
- * Write logs every timestep!
- * 
- * Records basic simulation statistics:
- * - Iteration number
- * - Current simulation time
- * - Current timestep size
- * 
- * Data is written both to stderr and to the log file for monitoring
- * and post-processing.
+ ## Write logs every timestep!
+ 
+ Records basic simulation statistics:
+ - Iteration number
+ - Current simulation time
+ - Current timestep size
+ 
+ Data is written both to stderr and to the log file for monitoring and post-processing.
  */
 event logWriting (i++) {
   if (i == 0) {

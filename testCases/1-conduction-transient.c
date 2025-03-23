@@ -6,18 +6,23 @@
 #include <string.h>
 
 /**
- * # 1D Transient Heat Conduction Solver
- * 
- * This program solves the transient heat conduction equation in one dimension:
- * 
- * \frac{\partial T}{\partial t} = \frac{\partial^2 T}{\partial x^2}
- * 
- * Subject to no-flux boundary conditions on both ends of the domain.
- * Initial condition is a "Dirac delta" approximated by a thin rectangle
- * centered at x=0 with total integral = 1.
- * 
- * The exact self-similar analytical solution is:
- * T(x,t) = \frac{1}{2\sqrt{\pi t}}e^{-x^2/4t}
+ ## 1D Transient Heat Conduction Solver
+ 
+ This program solves the transient heat conduction equation in one dimension:
+ 
+ $$
+ \frac{\partial T}{\partial t} = \frac{\partial^2 T}{\partial x^2}
+ $$
+ 
+ - Subject to no-flux boundary conditions on both ends of the domain.
+ - Initial condition is a "Dirac delta" approximated by a thin rectangle
+ centered at $x=0$ with total integral = 1.
+ 
+ The exact self-similar analytical solution is:
+
+ $$
+ T(x,t) = \frac{1}{2\sqrt{\pi t}}e^{-\frac{x^2}{4t}}
+ $$
 */
 
 // Simulation parameters
@@ -26,10 +31,10 @@
 #define X0      (-L0/2) // Left boundary
 
 /**
- * Create directory for intermediate output files
- * 
- * @return 0 on success, 1 on failure
- */
+ Create directory for intermediate output files
+
+ - @return 0 on success, 1 on failure
+*/
 int create_output_directory() {
   struct stat st = {0};
   
@@ -44,13 +49,12 @@ int create_output_directory() {
 }
 
 /**
- * Initialize temperature array with a "Dirac delta" approximation
- * using a thin rectangle centered at x=0 with total integral = 1
- * 
- * @param temperature The temperature array to initialize
- * @param dx Cell size
- * @param eps Half-width of the initial rectangle
- */
+ Initialize temperature array with a "Dirac delta" approximation using a thin rectangle centered at x=0 with total integral = 1
+
+ - @param temperature The temperature array to initialize
+ - @param dx Cell size
+ - @param eps Half-width of the initial rectangle
+*/
 void initialize_temperature(double *temperature, double dx, double eps) {
   for (int i = 0; i < N; i++) {
     double x = X0 + (i + 0.5) * dx; // Cell-center coordinate
@@ -63,12 +67,12 @@ void initialize_temperature(double *temperature, double dx, double eps) {
 }
 
 /**
- * Print current temperature field to console
- * 
- * @param temperature The current temperature array
- * @param dx Cell size
- * @param time Current simulation time
- */
+ Print current temperature field to console
+
+ - @param temperature The current temperature array
+ - @param dx Cell size
+ - @param time Current simulation time
+*/
 void print_temperature(double *temperature, double dx, double time) {
   for (int i = 0; i < N; i++) {
     double x = X0 + (i + 0.5) * dx;
@@ -78,13 +82,13 @@ void print_temperature(double *temperature, double dx, double time) {
 }
 
 /**
- * Save a snapshot of the temperature field to a CSV file
- * 
- * @param temperature The current temperature array
- * @param dx Cell size
- * @param time Current simulation time
- * @return 0 on success, 1 on failure
- */
+ Save a snapshot of the temperature field to a CSV file
+
+ - @param temperature The current temperature array
+ - @param dx Cell size
+ - @param time Current simulation time
+ - @return 0 on success, 1 on failure
+*/
 int save_snapshot(double *temperature, double dx, double time) {
   char filename[100];
   sprintf(filename, "intermediate/snapshot-%5.4f.csv", time);
@@ -107,12 +111,13 @@ int save_snapshot(double *temperature, double dx, double time) {
 }
 
 /**
- * Compute heat fluxes at cell interfaces
- * q[i+0.5] = - (T[i+1] - T[i])/dx with no-flux boundary conditions
- * 
- * @param temperature Current temperature array
- * @param flux Array to store computed fluxes (size N+1)
- * @param dx Cell size
+ Compute heat fluxes at cell interfaces
+
+ q[i+0.5] = - (T[i+1] - T[i])/dx with no-flux boundary conditions
+
+ - @param temperature Current temperature array
+ - @param flux Array to store computed fluxes (size N+1)
+ - @param dx Cell size
  */
 void compute_fluxes(double *temperature, double *flux, double dx) {
   flux[0] = 0.0; // Left boundary (no flux)
@@ -124,14 +129,14 @@ void compute_fluxes(double *temperature, double *flux, double dx) {
 }
 
 /**
- * Update temperature field based on fluxes
- * 
- * @param t_current Current temperature array
- * @param t_new New temperature array to be computed
- * @param flux The computed flux array
- * @param dx Cell size
- * @param dt Current time step
- */
+ Update temperature field based on fluxes
+
+ - @param t_current Current temperature array
+ - @param t_new New temperature array to be computed
+ - @param flux The computed flux array
+ - @param dx Cell size
+ - @param dt Current time step
+*/
 void update_temperature(double *t_current, double *t_new, double *flux, 
                         double dx, double dt) {
   for (int i = 0; i < N; i++) {
@@ -152,11 +157,11 @@ void update_temperature(double *t_current, double *t_new, double *flux,
 }
 
 /**
- * Copy updated temperature values to current array
- * 
- * @param t_current Current temperature array (destination)
- * @param t_new New temperature array (source)
- */
+ Copy updated temperature values to current array
+
+ - @param t_current Current temperature array (destination)
+ - @param t_new New temperature array (source)
+*/
 void swap_temperature(double *t_current, double *t_new) {
   for (int i = 0; i < N; i++) {
     t_current[i] = t_new[i];
@@ -164,12 +169,12 @@ void swap_temperature(double *t_current, double *t_new) {
 }
 
 /**
- * Save final results to a CSV file
- * 
- * @param temperature Final temperature array
- * @param dx Cell size
- * @return 0 on success, 1 on failure
- */
+ Save final results to a CSV file
+
+ - @param temperature Final temperature array
+ - @param dx Cell size
+ - @return 0 on success, 1 on failure
+*/
 int save_final_results(double *temperature, double dx) {
   FILE *file = fopen("conduction-transient.csv", "w");
   if (file == NULL) {
@@ -187,10 +192,10 @@ int save_final_results(double *temperature, double dx) {
 }
 
 /**
- * Run the transient heat conduction simulation
- * 
- * @return 0 on success, non-zero on failure
- */
+ Run the transient heat conduction simulation
+
+ - @return 0 on success, non-zero on failure
+*/
 int run_simulation() {
   // Numerical parameters
   const double dx   = L0/N;          // Cell size
