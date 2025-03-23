@@ -93,6 +93,7 @@ double mu_0 = 1.0;         // Base viscosity
 double mu_max = 1000.;     // Maximum viscosity for regularization
 double n = 1.0;            // Power law exponent
 int max_iter = 1e4;        // Maximum iterations
+bool face_center = true;   // Flag for face vs cell center calculations
 #define DT_MAX (1e-3)      // Maximum timestep
 
 int main(int argc, char const *argv[])
@@ -115,10 +116,10 @@ int main(int argc, char const *argv[])
   // Slip at the top
   u.t[top] = neumann(0);
   u.n[top] = neumann(0);
-  
   // No slip at the bottom
   u.n[bottom] = dirichlet(0);
   u.t[bottom] = dirichlet(0);
+  
 
 /**
  Values of yield stress, viscosity, and coefficient.
@@ -127,37 +128,18 @@ int main(int argc, char const *argv[])
  - Herschel-Bulkley: $\mu_0 = 1.0$; $\tauy = 0.25$ and n = 0.5
  - Bingham: $\mu_0 = 1.0$; $\tauy = 0.25$ and n = 1
 */
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < 2; i++) {
     // default parameters
-    tauy = 0.0;
+    tauy = 0.25;
     mu_0 = 1.0;
     n = 1.0;
     // Set parameters based on fluid type
-    switch (i) {
-      case 0: // Newtonian
-        tauy = 0.0;
-        mu_0 = 1.0;
-        n = 1.0;
-        sprintf(file_name, "newtonian");
-        break;
-      case 1: // Power law
-        tauy = 0.0;
-        mu_0 = 1.0;
-        n = 0.5;
-        sprintf(file_name, "powerlaw");
-        break;
-      case 2: // Herschel-Bulkley
-        tauy = 0.25;
-        mu_0 = 1.0;
-        n = 0.5;
-        sprintf(file_name, "herschelbulkley");
-        break;
-      case 3: // Bingham
-        tauy = 0.25;
-        mu_0 = 1.0;
-        n = 1.0;
-        sprintf(file_name, "bingham");
-        break;
+    if (i == 0) { // Face center
+      face_center = true;
+      sprintf(file_name, "face_center");
+    } else { // cell center
+      face_center = false;
+      sprintf(file_name, "cell_center");
     }
     fprintf(ferr, "Running case %d: tauy = %g, mu_0 = %g, n = %g\n", 
             i, tauy, mu_0, n);
@@ -228,31 +210,59 @@ event properties(i++) {
   
   Finally: $\mu = \min(\mu_{eq}, \mu_{max})$
   */
-  foreach_face() {
+
+  if (face_center) {
     // Calculate deformation tensor components at face centers
-    double D11 = (u.x[] - u.x[-1,0]);
-    double D22 = ((u.y[0,1] - u.y[0,-1]) + (u.y[-1,1] - u.y[-1,-1])) / 4.0;
-    double D12 = 0.5 * (((u.x[0,1] - u.x[0,-1]) + 
-              (u.x[-1,1] - u.x[-1,-1])) / 4.0 + (u.y[] - u.y[-1,0]));
-    
-    // Calculate second invariant
-    double D2 = sqrt(sq(D11) + sq(D22) + 2.0 * sq(D12)) / Delta;
-    
-    // Calculate effective viscosity
-    double mu_temp;
-    if (D2 > 0.0) {
-      double temp = tauy / (sqrt(2.0) * D2) + 
-                   mu_0 * exp((n - 1.0) * log(D2 / sqrt(2.0)));
-      mu_temp = min(temp, mu_max);
-    } else {
-      if (tauy > 0.0 || n < 1.0) {
-        mu_temp = mu_max;
+    foreach_face() {
+      // Calculate deformation tensor components at face centers
+      double D11 = (u.x[] - u.x[-1,0]);
+      double D22 = ((u.y[0,1] - u.y[0,-1]) + (u.y[-1,1] - u.y[-1,-1])) / 4.0;
+      double D12 = 0.5 * (((u.x[0,1] - u.x[0,-1]) + 
+                (u.x[-1,1] - u.x[-1,-1])) / 4.0 + (u.y[] - u.y[-1,0]));
+      
+      // Calculate second invariant
+      double D2 = sqrt(sq(D11) + sq(D22) + 2.0 * sq(D12)) / Delta;
+      
+      // Calculate effective viscosity
+      double mu_temp;
+      if (D2 > 0.0) {
+        double temp = tauy / (sqrt(2.0) * D2) + 
+                     mu_0 * exp((n - 1.0) * log(D2 / sqrt(2.0)));
+        mu_temp = min(temp, mu_max);
       } else {
-        mu_temp = (n == 1.0 ? mu_0 : 0.0);
+        if (tauy > 0.0 || n < 1.0) {
+          mu_temp = mu_max;
+        } else {
+          mu_temp = (n == 1.0 ? mu_0 : 0.0);
+        }
+      }
+      
+      // Apply viscosity at face
+      muv.x[] = fm.x[] * mu_temp;
+    }
+  } else {
+    // Calculate deformation tensor components at cell centers
+    scalar mu_temp[];
+    foreach() {
+      // Calculate deformation tensor components at cell centers
+      double D11 = (u.x[1,0] - u.x[-1,0])/2.0;
+      double D22 = (u.y[0,1] - u.y[0,-1])/2.0;
+      double D12 = 0.5*(u.x[0,1] - u.x[0,-1] + u.y[1,0] - u.y[-1,0])/2.0;
+      
+      // Calculate second invariant
+      double D2 = sqrt(sq(D11) + sq(D22) + 2.0 * sq(D12)) / Delta;
+
+      // Calculate effective viscosity
+      if (D2 > 0.0) {
+        double temp = tauy / (sqrt(2.0) * D2) + 
+                     mu_0 * exp((n - 1.0) * log(D2 / sqrt(2.0)));
+        mu_temp[] = min(temp, mu_max);
+      } else {
+        mu_temp[] = mu_max;
       }
     }
-    
-    // Apply viscosity at face
-    muv.x[] = fm.x[] * mu_temp;
+    foreach_face(){
+      muv.x[] = fm.x[] * (mu_temp[]+mu_temp[-1,0])/2.0;
+    }
   }
 }
