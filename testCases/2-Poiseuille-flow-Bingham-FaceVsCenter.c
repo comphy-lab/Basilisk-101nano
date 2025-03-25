@@ -98,9 +98,6 @@ bool face_center = true;   // Flag for face vs cell center calculations
 
 int main(int argc, char const *argv[])
 {
-  
-  sprintf(file_name, "%s", argv[1]);
-  
   // Initialize grid and domain
   init_grid(1<<6);
   L0 = 1.0;
