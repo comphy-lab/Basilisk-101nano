@@ -275,10 +275,10 @@ event properties(i++) {
                      mu_0 * exp((n - 1.0) * log(D2 / sqrt(2.0)));
         mu_temp = min(temp, mu_max);
       } else {
-        if (tauy > 0.0 || n < 1.0) {
+        if (tauy > 0.0) {
           mu_temp = mu_max;
         } else {
-          mu_temp = (n == 1.0 ? mu_0 : 0.0);
+          mu_temp = mu_0;
         }
       }
       
@@ -301,9 +301,13 @@ event properties(i++) {
       if (D2 > 0.0) {
         double temp = tauy / (sqrt(2.0) * D2) + 
                      mu_0 * exp((n - 1.0) * log(D2 / sqrt(2.0)));
-        mu_temp[] = min(temp, mu_max);
+        mu_temp = min(temp, mu_max);
       } else {
-        mu_temp[] = mu_max;
+        if (tauy > 0.0) {
+          mu_temp = mu_max;
+        } else {
+          mu_temp = mu_0;
+        }
       }
     }
     foreach_face(){
