@@ -134,15 +134,20 @@ deps/
 **/restart
 **/getData-Rayleigh-Benard
 **/getData-2D_rot_cylinder_ink
-
+**/2-Poiseuille-flow-Newtonian
+**/2-Poiseuille-flow-Bingham-FaceVsCenter
+**/2-Poiseuille-flow-Bingham
+**/getDatay-center
+**/getDatay-Face
 **/getFacet
 **/getData
 **/getData-generic-heatEq
 **/getData-generic-one-phase
 **/getData-LidDriven
+
 # Never exclude these files
 !*.c
 !*.h
 !*.sbatch
-postProcess/getData-generic
-postProcess/getData-LidDriven-Line
+**/getData-generic
+**/getData-Line

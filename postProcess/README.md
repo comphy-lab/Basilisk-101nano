@@ -23,10 +23,11 @@
 | [2-Poiseuille-flow-Bingham.c](../testCases/2-Poiseuille-flow-Bingham.c) | [2-casesWithNS.ipynb](2-casesWithNS.ipynb) | ⏳ In Progress |
 | [2-2D_rot_cylinder.c](../testCases/2-2D_rot_cylinder.c) | [2-casesWithNS.ipynb](2-casesWithNS.ipynb) | [✅ Complete](#2-2d_rot_cylinder) |
 | [2-2D_rot_cylinder_ink.c](../testCases/2-2D_rot_cylinder_ink.c) | [2-2D_rot_cylinder_ink.py](2-2D_rot_cylinder_ink.py) | [⏳ In Progress](#2-2d_rot_cylinder_ink) |
-| [2-LidDrivenCavity-Newtonian.c](../testCases/2-LidDrivenCavity-Newtonian.c) | [getData-LidDriven.c](getData-LidDriven.c) | ⏳ In Progress |
-| [2-LidDrivenCavity-Newtonian-dieInjection.c](../testCases/2-LidDrivenCavity-Newtonian-dieInjection.c) | [getData-LidDriven.c](getData-LidDriven.c) | ⏳ In Progress |
+| [2-LidDrivenCavity-Newtonian.c](../testCases/2-LidDrivenCavity-Newtonian.c) | [2-casesWithNS.ipynb](2-casesWithNS.ipynb) | [✅ Complete](#2-liddrivencavity-newtonian) |
+| [2-LidDrivenCavity-Newtonian-dieInjection.c](../testCases/2-LidDrivenCavity-Newtonian-dieInjection.c) | [2-LidDrivenCavity-Newtonian-dieInjection.py](2-LidDrivenCavity-Newtonian-dieInjection.py) | [✅ Complete](#2-liddrivencavity-newtonian-dieinjection) |
 | [2-LidDrivenCavity-Bingham.c](../testCases/2-LidDrivenCavity-Bingham.c) | [2-LidDrivenCavity-Bingham.ipynb](2-LidDrivenCavity-Bingham.ipynb) | [✅ Complete](#2-liddrivencavity-bingham-data) |
-| [2-Rayleigh-Benard.c](../testCases/2-Rayleigh-Benard.c) | [2-Rayleigh-Benard.py](2-Rayleigh-Benard.py) | ⏳ In Progress |
+| [2-Rayleigh-Benard.c](../testCases/2-Rayleigh-Benard.c) | [2-Rayleigh-Benard.py](2-Rayleigh-Benard.py) | [✅ Complete](#2-rayleigh-benard) |
+| [2-Rayleigh-Benard.c](../testCases/2-Rayleigh-Benard.c) | [2-Rayleigh-Benard-AMR.py](2-Rayleigh-Benard-AMR.py) | [⏳ In Progress](#2-rayleigh-benard-amr) |
 
 ### 3. Multiphase Flow
 | Test Case | Post-Processing Script | Status |
@@ -90,17 +91,17 @@ Heat flux on the top wall is modeled as a Gaussian heat flux.
 ![fail](img/2-2D_rot_cylinder-ink.png)
 
 ## 2-LidDrivenCavity-Newtonian
-(Post-processing script in progress)
+![test](img/2-LidDrivenCavity-Bingham-tau0.0.png)
+![](img/2-LidDrivenCavity-Newtonian.png)
+
+## 2-LidDrivenCavity-Newtonian-dieInjection
+![](img/2-LidDrivenCavity-Newtonian-dieInjection.gif)
 
 ## 2-LidDrivenCavity-Bingham-Data
 
 This is a lid driven cavity problem with a Bingham fluid.
 
 ![](img/2-LidDrivenCavity-Bingham-lid_driven_cavity_bingham_flow.png)
-
-### Newtonian 
-
-![](img/tau0.0.png)
 
 ### Bingham 
 - $\tau_y = 0.707$
@@ -114,6 +115,9 @@ This is a lid driven cavity problem with a Bingham fluid.
 
 ## 2-Rayleigh-Benard
 ![](img/2-Rayleigh-Benard.gif)
+
+## 2-Rayleigh-Benard-AMR
+(Post-processing script in progress)
 
 ## 3-DropImpactOnSolids
 (Post-processing script in progress)

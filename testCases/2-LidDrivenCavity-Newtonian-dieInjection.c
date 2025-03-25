@@ -15,13 +15,13 @@ This extends the classic benchmark case with a passive tracer to visualize flow 
 #include "die-injection.h"
 
 // Constants
-#define LEVEL   7       // Grid refinement level
+#define LEVEL   8       // Grid refinement level
 #define MAXDT   (1e-4)  // Maximum timestep
 
 // Global variables
 int imax = 1e5;                   // Maximum iterations
-double tmax = 2.0;                // Maximum simulation time
-double tsnap = 0.05;              // Time interval between snapshots
+double tmax = 1.0;                // Maximum simulation time
+double tsnap = 0.01;              // Time interval between snapshots
 double end = 2.0;                 // End time for simulation
 
 // Scalar field for convergence check
@@ -60,8 +60,50 @@ event init (t = 0) {
 }
 
 /**
-## Main Function
+## Snapshot Generation
+Save snapshots at regular intervals for flow visualization
 */
+event writingFiles (t=0.; t += tsnap; t < tmax+tsnap) {
+  char filename[100];
+  sprintf(filename, "intermediate/snapshot-%5.4f", t);  
+  dump(file=filename);
+}
+
+/**
+ * @brief Logs simulation progress and convergence details.
+ *
+ * On each iteration, this event updates the stored x-velocity field for convergence checking and logs the
+ * current iteration number, timestep (dt), simulation time (t), and the convergence error (difference between
+ * the current and previous x-velocity fields) to the log file.
+ */
+event logfile (i++; i <= imax) {
+  foreach() {
+    un[] = u.x[];
+  }
+  fprintf(ferr, "i = %d: dt = %g, t = %g, err = %g\n", i, dt, t, change(u.x, un));
+}
+
+/**
+ * @brief Outputs final simulation results for visualization.
+ *
+ * When the simulation reaches the end time, this event outputs the final state of simulation fields
+ * to a file named "results" for post-processing and visualization.
+ */
+event end (t = end) {  
+  // Output fields in a format suitable for visualization
+  dump(file="results");
+}
+
+/**
+ * @brief Entry point for the lid-driven cavity flow simulation with die injection.
+ *
+ * Initializes the computational grid and simulation parameters (domain size, timestep, tolerance, and CFL condition),
+ * and stores the initial velocity field for convergence monitoring. Configures die injection settings by defining
+ * the injection time and location, creates a directory for saving intermediate simulation snapshots, and triggers
+ * the simulation run.
+ *
+ * @return int Exit status code (typically 0 upon successful completion).
+ */
 int main() {
   // Initialize grid and parameters
   init_grid(1<<LEVEL);
@@ -89,34 +131,4 @@ int main() {
   // Run simulation
   run();
   
-}
-
-/**
-## Snapshot Generation
-Save snapshots at regular intervals for flow visualization
-*/
-event writingFiles (t=0.; t += tsnap; t < tmax+tsnap) {
-  char filename[100];
-  sprintf(filename, "intermediate/snapshot-%5.4f", t);  
-  dump(file=filename);
-}
-
-/**
-## Convergence Monitoring
-Log information about simulation progress and convergence
-*/
-event logfile (i++; i <= imax) {
-  foreach() {
-    un[] = u.x[];
-  }
-  fprintf(ferr, "i = %d: dt = %g, t = %g, err = %g\n", i, dt, t, change(u.x, un));
-}
-
-/**
-## Output & Visualization
-Generate final output for post-processing and visualization
-*/
-event end (t = end) {  
-  // Output fields in a format suitable for visualization
-  dump(file="results");
 }

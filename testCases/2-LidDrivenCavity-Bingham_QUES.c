@@ -1,5 +1,5 @@
 /**
-# Lid-Driven Cavity Flow of a Bingham Fluid
+## Lid-Driven Cavity Flow of a Bingham Fluid
 
 This simulation models a lid-driven cavity flow for a generalized Newtonian fluid,
 specifically a Bingham fluid. The code uses regularization of the stress-strain

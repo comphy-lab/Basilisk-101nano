@@ -1,17 +1,22 @@
 /**
- * # 1D Transient Heat Conduction Solver (Basilisk version)
- * 
- * This program solves the transient heat conduction equation in one dimension:
- * 
- * \frac{\partial T}{\partial t} = \frac{\partial^2 T}{\partial x^2}
- * 
- * Subject to no-flux boundary conditions on both ends of the domain.
- * Initial condition is a "Dirac delta" approximated by a thin rectangle
- * centered at x=0 with total integral = 1.
- * 
- * The exact self-similar analytical solution is:
- * T(x,t) = \frac{1}{2\sqrt{\pi t}}e^{-x^2/4t}
- */
+ ## 1D Transient Heat Conduction Solver (Basilisk version)
+ 
+ This program solves the transient heat conduction equation in one dimension:
+ 
+ $$
+ \frac{\partial T}{\partial t} = \frac{\partial^2 T}{\partial x^2}
+ $$
+ 
+ - Subject to no-flux boundary conditions on both ends of the domain.
+ - Initial condition is a "Dirac delta" approximated by a thin rectangle
+ centered at $x=0$ with total integral = 1.
+ 
+ The exact self-similar analytical solution is:
+ 
+ $$
+ T(x,t) = \frac{1}{2\sqrt{\pi t}}e^{-\frac{x^2}{4t}}
+ $$
+*/
 
 #include "grid/cartesian1D.h"
 #include "run.h"
@@ -24,6 +29,18 @@ scalar T[];
 #define tmax 1.0
 #define tsnap 0.1
 double K;
+/**
+ * @brief Initializes simulation parameters and starts the transient heat conduction solver.
+ *
+ * This function sets up the computational domain by specifying the domain length, left boundary,
+ * and the number of cells for discretization. It computes a stable timestep based on the CFL
+ * condition for an explicit finite volume scheme and creates an output directory ("intermediate")
+ * for saving simulation snapshots. Finally, it launches the simulation by calling the run() function.
+ *
+ * @note The stability constant K must be properly defined (currently marked as "XX") to ensure a stable solution.
+ *
+ * @return int Exit status.
+ */
 int main() {
   // Domain setup
   L0 = 10.0;     // Domain length
@@ -45,11 +62,11 @@ int main() {
 }
 
 /**
- * Initialize temperature field
- * 
- * Sets up a "Dirac delta" approximated by a thin rectangle
- * centered at x=0 with total integral = 1.
- */
+ ## Initialize temperature field
+
+ - Sets up a `Dirac delta` approximated by a thin rectangle
+ - centered at $x=0$ with total integral = 1.
+*/
 event init (t = 0) {
   foreach()
     T[] = (fabs(x) < EPS) ? 1.0/EPS/2.0 : 0.0; 
@@ -57,7 +74,16 @@ event init (t = 0) {
 }
 
 /**
- * Time integration using explicit finite volume method
+ ## Time integration using explicit finite volume method
+*/
+/**
+ * @brief Executes a single explicit Euler time integration step for the 1D heat conduction simulation.
+ *
+ * This event calculates the next time step using dtnext(DT) and updates the temperature field T.
+ * It outlines the process for computing temperature fluxes at cell faces and the corresponding rate of 
+ * temperature change, which are then used to update the temperature field via an explicit Euler step.
+ *
+ * @note The detailed implementations for flux calculation and temperature derivative computation are pending.
  */
 event integration (i++) {
   // Get timestep for this iteration
@@ -84,8 +110,8 @@ event integration (i++) {
 }
 
 /**
- * Save snapshots at regular intervals
- */
+ ## Save snapshots at regular intervals
+*/
 event writingFiles (t += tsnap; t < tmax+tsnap) {
   char filename[100];
   sprintf(filename, "intermediate/snapshot-%5.4f.csv", t);  
@@ -99,7 +125,11 @@ event writingFiles (t += tsnap; t < tmax+tsnap) {
 }
 
 /**
- * Save final results and comparison with analytical solution
+ * @brief Saves the final simulation temperature distribution to a CSV file.
+ *
+ * At the conclusion of the simulation, this event writes the x-coordinate and corresponding
+ * temperature values for each grid cell to "conduction-transient.csv". The resulting file can
+ * be used for post-processing and comparison with analytical solutions.
  */
 event end (t = end) {
   char filename[100];

@@ -18,8 +18,37 @@ double xmin, ymin, xmax, ymax, Deltax, Deltay;
 
 scalar * list = NULL;
 
+/**
+ * @brief Main entry point for simulation data interpolation.
+ *
+ * This function validates the command-line arguments, parses input parameters,
+ * restores simulation data, adjusts scalar fields with weighting factors, and performs interpolation
+ * over a computed grid. It outputs the grid coordinates along with the interpolated values.
+ *
+ * The function expects exactly 6 additional arguments:
+ *   <filename> <xmin> <ymin> <xmax> <ymax> <ny>
+ * where:
+ *   - <filename> specifies the input data file.
+ *   - <xmin> and <ymin> define the lower bounds of the computational domain.
+ *   - <xmax> and <ymax> define the upper bounds of the computational domain.
+ *   - <ny> is the number of grid divisions along the y-axis.
+ *
+ * If the argument count is incorrect, it prints an error message with usage instructions to stderr
+ * and exits with a status of 1.
+ *
+ * @param a Number of command-line arguments (including the program name).
+ * @param arguments Array of command-line argument strings.
+ *
+ * @return int Returns 1 if the argument count is incorrect; otherwise, completes the data processing.
+ */
 int main(int a, char const *arguments[])
 {
+  if (a != 7) {
+    fprintf(stderr, "Error: Expected 6 arguments\n");
+    fprintf(stderr, "Usage: %s <filename> <xmin> <ymin> <xmax> <ymax> <ny>\n", arguments[0]);
+    return 1;
+  }
+
   sprintf (filename, "%s", arguments[1]);
   xmin = atof(arguments[2]); ymin = atof(arguments[3]);
   xmax = atof(arguments[4]); ymax = atof(arguments[5]);

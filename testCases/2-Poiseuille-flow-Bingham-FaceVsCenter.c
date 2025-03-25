@@ -93,20 +93,34 @@ double mu_0 = 1.0;         // Base viscosity
 double mu_max = 1000.;     // Maximum viscosity for regularization
 double n = 1.0;            // Power law exponent
 int max_iter = 1e4;        // Maximum iterations
+bool face_center = true;   // Flag for face vs cell center calculations
 #define DT_MAX (1e-3)      // Maximum timestep
 
 /**
- * @brief Main entry point for the planar Couette flow simulation.
+ * @brief Entry point for the planar Couette flow simulation.
  *
- * This function initializes the simulation grid and domain parameters (domain size, origin, timestep, and convergence
- * tolerance), and sets the boundary conditions (periodic for right-left, slip at the top, and no-slip at the bottom).
- * It then sequentially configures and runs simulations for four fluid models—Newtonian, Power law, Herschel-Bulkley, and
- * Bingham—by setting the corresponding parameters (yield stress, base viscosity, and power-law exponent) and invoking
- * the simulation routine.
+ * This function initializes the grid, domain parameters, and boundary conditions for a generalized Newtonian fluid 
+ * undergoing planar Couette flow. It reads the output file name from the first command-line argument and sets up a grid 
+ * with a resolution of 2^6 cells, a domain length L0 = 1.0, and an origin at (-0.5, -0.5). Time-stepping properties 
+ * and a convergence tolerance are also configured.
  *
- * The output file name is initially sourced from the first command-line argument and updated for each fluid case.
+ * The boundary conditions are defined as periodic on the left-right boundaries, with slip conditions on the top (Neumann) 
+ * and no-slip conditions on the bottom (Dirichlet). The function then runs two simulation cases:
+ * - Case 0 (face-centered): Uses face-centered calculations for the deformation tensor and assigns "face_center" as the output file name.
+ * - Case 1 (cell-centered): Uses cell-centered calculations and assigns "cell_center" as the output file name.
  *
- * @return int Exit status of the program.
+ * In each case, default fluid parameters (yield stress, base viscosity, and power law exponent) are set. These parameters 
+ * correspond to different fluid types:
+ * - Newtonian:          μ₀ = 1.0, τᵧ = 0.0, n = 1
+ * - Power law:          μ₀ = 1.0, τᵧ = 0.0, n = 0.5
+ * - Herschel-Bulkley:   μ₀ = 1.0, τᵧ = 0.25, n = 0.5
+ * - Bingham:            μ₀ = 1.0, τᵧ = 0.25, n = 1
+ *
+ * Each case is logged and executed by invoking the run() function.
+ *
+ * @param argc Number of command-line arguments.
+ * @param argv Array of command-line argument strings; argv[1] specifies the output file name.
+ * @return int Returns 0 upon successful completion.
  */
 int main(int argc, char const *argv[])
 {
@@ -128,10 +142,10 @@ int main(int argc, char const *argv[])
   // Slip at the top
   u.t[top] = neumann(0);
   u.n[top] = neumann(0);
-  
   // No slip at the bottom
   u.n[bottom] = dirichlet(0);
   u.t[bottom] = dirichlet(0);
+  
 
 /**
  Values of yield stress, viscosity, and coefficient.
@@ -140,37 +154,18 @@ int main(int argc, char const *argv[])
  - Herschel-Bulkley: $\mu_0 = 1.0$; $\tauy = 0.25$ and n = 0.5
  - Bingham: $\mu_0 = 1.0$; $\tauy = 0.25$ and n = 1
 */
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < 2; i++) {
     // default parameters
-    tauy = 0.0;
+    tauy = 0.25;
     mu_0 = 1.0;
     n = 1.0;
     // Set parameters based on fluid type
-    switch (i) {
-      case 0: // Newtonian
-        tauy = 0.0;
-        mu_0 = 1.0;
-        n = 1.0;
-        sprintf(file_name, "newtonian");
-        break;
-      case 1: // Power law
-        tauy = 0.0;
-        mu_0 = 1.0;
-        n = 0.5;
-        sprintf(file_name, "powerlaw");
-        break;
-      case 2: // Herschel-Bulkley
-        tauy = 0.25;
-        mu_0 = 1.0;
-        n = 0.5;
-        sprintf(file_name, "herschelbulkley");
-        break;
-      case 3: // Bingham
-        tauy = 0.25;
-        mu_0 = 1.0;
-        n = 1.0;
-        sprintf(file_name, "bingham");
-        break;
+    if (i == 0) { // Face center
+      face_center = true;
+      sprintf(file_name, "face_center");
+    } else { // cell center
+      face_center = false;
+      sprintf(file_name, "cell_center");
     }
     fprintf(ferr, "Running case %d: tauy = %g, mu_0 = %g, n = %g\n", 
             i, tauy, mu_0, n);
@@ -226,27 +221,26 @@ event logfile(i += 500; i <= max_iter) {
 }
 
 /**
- * @brief Computes the effective viscosity for a generalized Newtonian fluid at cell faces.
+ * @brief Compute and update the effective viscosity for a generalized Newtonian fluid.
  *
- * This event updates the face viscosity field by calculating a locally adaptive viscosity based
- * on the rate-of-strain tensor. The procedure involves:
- * - Computing deformation tensor components from the velocity field:
- *   - D11 from consecutive horizontal velocity differences.
- *   - D22 from averaged vertical velocity differences.
- *   - D12 from a combination of horizontal and vertical differences.
- * - Calculating the second invariant of the deformation tensor:
- *   $$D_2 = \\frac{\\sqrt{D_{11}^2 + D_{22}^2 + 2\\,D_{12}^2}}{\\Delta},$$
- *   where \\(\\Delta\\) is the grid spacing.
- * - Determining the equivalent viscosity:
- *   $$\\mu_{eq} = \\mu_0\\left(\\frac{D_2}{\\sqrt{2}}\\right)^{n-1} + \\frac{\\tauy}{\\sqrt{2}\\,D_2},$$
- * - Enforcing an upper limit by taking
- *   $$\\mu = \\min(\\mu_{eq}, \\mu_{max}).$$
+ * This event calculates the effective viscosity using a regularized power-law model based on the
+ * second invariant of the rate of deformation tensor. Depending on the global flag `face_center`, the
+ * tensor components are computed either at the face centers or the cell centers.
  *
- * If the deformation invariant \\(D_2\\) is zero, viscosity is set based on the following conditions:
- * - If the yield stress \\(\\tauy\\) is positive or the exponent \\(n < 1\\), the viscosity defaults to \\(\\mu_{max}\\).
- * - Otherwise, if \\(n = 1\\) it is set to \\(\\mu_0\\); for other cases, it is set to 0.
+ * The second invariant is computed as:
+ * \f[
+ * D_2 = \frac{\sqrt{D_{11}^2 + 2D_{12}^2 + D_{22}^2}}{\Delta}
+ * \f]
  *
- * The computed viscosity is scaled by the corresponding face metric and stored in the face viscosity field.
+ * This invariant is then used to calculate the equivalent viscosity:
+ * \f[
+ * \mu_{eq} = \mu_0 \left(\frac{D_2}{\sqrt{2}}\right)^{n-1} + \frac{\tau_y}{\sqrt{2}D_2}
+ * \f]
+ *
+ * The final viscosity is taken as the minimum between \f$\mu_{eq}\f$ and \f$\mu_{max}\f$. In cases
+ * where \f$D_2 \leq 0\f$, the viscosity is assigned either \f$\mu_{max}\f$ or \f$\mu_0\f$ based on the
+ * yield stress \f$\tau_y\f$ and the power-law exponent \f$n\f$. The computed viscosity is then applied
+ * to the simulation grid.
  */
 event properties(i++) {
   /**
@@ -261,31 +255,63 @@ event properties(i++) {
   
   Finally: $\mu = \min(\mu_{eq}, \mu_{max})$
   */
-  foreach_face() {
+
+  if (face_center) {
     // Calculate deformation tensor components at face centers
-    double D11 = (u.x[] - u.x[-1,0]);
-    double D22 = ((u.y[0,1] - u.y[0,-1]) + (u.y[-1,1] - u.y[-1,-1])) / 4.0;
-    double D12 = 0.5 * (((u.x[0,1] - u.x[0,-1]) + 
-              (u.x[-1,1] - u.x[-1,-1])) / 4.0 + (u.y[] - u.y[-1,0]));
-    
-    // Calculate second invariant
-    double D2 = sqrt(sq(D11) + sq(D22) + 2.0 * sq(D12)) / Delta;
-    
-    // Calculate effective viscosity
-    double mu_temp;
-    if (D2 > 0.0) {
-      double temp = tauy / (sqrt(2.0) * D2) + 
-                   mu_0 * exp((n - 1.0) * log(D2 / sqrt(2.0)));
-      mu_temp = min(temp, mu_max);
-    } else {
-      if (tauy > 0.0 || n < 1.0) {
-        mu_temp = mu_max;
+    foreach_face() {
+      // Calculate deformation tensor components at face centers
+      double D11 = (u.x[] - u.x[-1,0]);
+      double D22 = ((u.y[0,1] - u.y[0,-1]) + (u.y[-1,1] - u.y[-1,-1])) / 4.0;
+      double D12 = 0.5 * (((u.x[0,1] - u.x[0,-1]) + 
+                (u.x[-1,1] - u.x[-1,-1])) / 4.0 + (u.y[] - u.y[-1,0]));
+      
+      // Calculate second invariant
+      double D2 = sqrt(sq(D11) + sq(D22) + 2.0 * sq(D12)) / Delta;
+      
+      // Calculate effective viscosity
+      double mu_temp;
+      if (D2 > 0.0) {
+        double temp = tauy / (sqrt(2.0) * D2) + 
+                     mu_0 * exp((n - 1.0) * log(D2 / sqrt(2.0)));
+        mu_temp = min(temp, mu_max);
       } else {
-        mu_temp = (n == 1.0 ? mu_0 : 0.0);
+        if (tauy > 0.0) {
+          mu_temp = mu_max;
+        } else {
+          mu_temp = mu_0;
+        }
+      }
+      
+      // Apply viscosity at face
+      muv.x[] = fm.x[] * mu_temp;
+    }
+  } else {
+    // Calculate deformation tensor components at cell centers
+    scalar mu_temp[];
+    foreach() {
+      // Calculate deformation tensor components at cell centers
+      double D11 = (u.x[1,0] - u.x[-1,0])/2.0;
+      double D22 = (u.y[0,1] - u.y[0,-1])/2.0;
+      double D12 = 0.5*(u.x[0,1] - u.x[0,-1] + u.y[1,0] - u.y[-1,0])/2.0;
+      
+      // Calculate second invariant
+      double D2 = sqrt(sq(D11) + sq(D22) + 2.0 * sq(D12)) / Delta;
+
+      // Calculate effective viscosity
+      if (D2 > 0.0) {
+        double temp = tauy / (sqrt(2.0) * D2) + 
+                     mu_0 * exp((n - 1.0) * log(D2 / sqrt(2.0)));
+        mu_temp = min(temp, mu_max);
+      } else {
+        if (tauy > 0.0) {
+          mu_temp = mu_max;
+        } else {
+          mu_temp = mu_0;
+        }
       }
     }
-    
-    // Apply viscosity at face
-    muv.x[] = fm.x[] * mu_temp;
+    foreach_face(){
+      muv.x[] = fm.x[] * (mu_temp[]+mu_temp[-1,0])/2.0;
+    }
   }
 }

@@ -1,5 +1,5 @@
 /**
-# Lid-Driven Cavity Flow of a Bingham Fluid
+## Lid-Driven Cavity Flow of a Bingham Fluid
 
 This simulation models a lid-driven cavity flow for a generalized Newtonian fluid,
 specifically a Bingham fluid. The code uses regularization of the stress-strain
@@ -8,8 +8,8 @@ relationship instead of the Augmented Lagrangian Method.
 The second invariant of the stress tensor is calculated at face centers.
 
 ## Parameters
-- Newtonian: μ₀ = 1.0; τᵧ = 0.0 and n = 1
-- Bingham: μ₀ = 1.0; τᵧ > 0.0 and n = 1
+- Newtonian: $\mu_0 = 1.0; \tau_y = 0.0$ and $n = 1$
+- Bingham: $\mu_0 = 1.0; \tau_y > 0.0$ and $n = 1$
 */
 #include "navier-stokes/centered.h"
 

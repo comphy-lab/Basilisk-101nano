@@ -1,5 +1,5 @@
 /**
-# 2D Rotating Cylindrical Annulus Simulation
+## 2D Rotating Cylindrical Annulus Simulation
  
 Simulates the flow between two concentric cylinders where the inner cylinder rotates.
 This is a classic problem in fluid dynamics known as Taylor-Couette flow.
@@ -23,7 +23,16 @@ const face vector muv[] = {1, 1}; // Viscosity coefficient (e.g., nu = 1e-3)
 // File naming variables
 char logFile[80];          // Log file name
 char dumpFile[80];         // Restart file name
-char nameOut[80];          // Output snapshot file name
+char nameOut[80];          /**
+ * @brief Initializes the simulation environment and launches the simulation.
+ *
+ * Configures the simulation domain size based on the outer cylinder radius, centers the domain,
+ * and sets a grid resolution of 128 cells per dimension. It also sets the maximum timestep size for
+ * the implicit solver, creates the directory for simulation snapshots, assigns file names for dumping
+ * restart data and logging, and then starts the simulation.
+ *
+ * @return int Exit status.
+ */
 
 int main() {
   // Ajustamos el tamaño del dominio para que sea [-L0/2,L0/2] x [-L0/2,L0/2] (por ejemplo)
@@ -50,15 +59,11 @@ int main() {
 }
 
 /**
- * En t=0, definimos la geometría del cilindro y su condición de contorno.
- * At t = 0, we define the cylinder geometry and its boundary condition.
- * 
- * This function initializes:
- * 1. The viscosity field
- * 2. The cylindrical annulus geometry using embedded boundaries
- * 3. Boundary conditions for normal and tangential velocities:
- *    - Inner cylinder rotates with angular velocity OMEGA
- *    - Outer cylinder is stationary
+ ## Initialization event (t=0)
+
+ This event defines the geometry of the cylindrical annulus using the embedded boundary
+ method and sets boundary conditions for the velocity field.
+ The initial condition imposes rigid body rotation on the inner cylinder.
  */
 event init (t = 0) {
     mu = fm;               // Set viscosity field for the fluid domain
@@ -73,11 +78,11 @@ event init (t = 0) {
 }
 
 /**
- * Creates simulation snapshots at regular time intervals
- * 
- * This saves:
- * 1. A restart file for resuming the simulation
- * 2. Snapshot files in the 'intermediate' directory for visualization and analysis
+ ## Creates simulation snapshots at regular time intervals
+ 
+ This saves:
+ 1. A restart file for resuming the simulation
+ 2. Snapshot files in the 'intermediate' directory for visualization and analysis
  */
 event writingFiles (t = 0.0; t += tsnap; t < tmax+tsnap) {
   dump (file = dumpFile);
@@ -86,15 +91,11 @@ event writingFiles (t = 0.0; t += tsnap; t < tmax+tsnap) {
 }
 
 /**
- * Write logs every timestep!
- * 
- * Records basic simulation statistics:
- * - Iteration number
- * - Current simulation time
- * - Current timestep size
- * 
- * Data is written both to stderr and to the log file for monitoring
- * and post-processing.
+ * @brief Logs simulation statistics at each timestep.
+ *
+ * This event records the iteration number, simulation time, and timestep size by writing the data to both
+ * standard error and a designated log file. On the first call (when i == 0), it outputs a header line ("i t dt")
+ * to both destinations.
  */
 event logWriting (i++) {
   if (i == 0) {
