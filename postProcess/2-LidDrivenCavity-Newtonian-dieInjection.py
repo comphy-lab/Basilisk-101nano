@@ -99,7 +99,7 @@ def process_timestep(ti, caseToProcess, folder, tsnap, GridsPerR, rmin, rmax, zm
     
     Calculates the simulation time using the timestep index and a time increment, then
     retrieves field data from an intermediate snapshot file. Creates a figure with two
-    subplots—one displaying the rate of strain tensor (with a coolwarm heat map) and
+    subplots—one displaying the dye color (with a coolwarm heat map) and
     the other showing velocity magnitude (with a viridis heat map). Both panels include
     domain boundaries and streamlines for the stream function. If the snapshot file is
     missing or the output image already exists, the function prints a warning and exits.
@@ -140,7 +140,7 @@ def process_timestep(ti, caseToProcess, folder, tsnap, GridsPerR, rmin, rmax, zm
     ax1.plot([rmin, rmax], [zmax, zmax], '-', color='black', linewidth=lw)
     ax1.plot([rmax, rmax], [zmin, zmax], '-', color='black', linewidth=lw)
 
-    # Plot the rate of strain tensor with a heat map
+    # Plot the dye with a heat map
     cntrl1 = ax1.pcolormesh(Z, R, T, cmap="coolwarm", edgecolor='face', vmax=1, vmin=0)
     
     # Add streamlines using the stream function
