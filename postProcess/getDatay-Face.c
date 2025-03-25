@@ -31,8 +31,6 @@ int main(int a, char const *arguments[])
   u.t[bottom] = dirichlet(0);
   
   sprintf (filename, "%s", arguments[1]);
-  // ... rest of the code ...
-}
   
   restore (file = filename);
   boundary((scalar *){u});
