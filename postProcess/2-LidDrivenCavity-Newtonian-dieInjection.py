@@ -119,7 +119,7 @@ def process_timestep(ti, caseToProcess, folder, tsnap, GridsPerR, rmin, rmax, zm
     divider1 = make_axes_locatable(ax1)
     cax1 = divider1.append_axes("right", size="5%", pad=0.1)
     c1 = plt.colorbar(cntrl1, cax=cax1)
-    c1.set_label(r'$log_{10}(\|\mathcal{D}_{ij}\|)$', fontsize=TickLabel, labelpad=5)
+    c1.set_label(r'$T$', fontsize=TickLabel, labelpad=5)
     c1.ax.tick_params(labelsize=TickLabel)
 
     # Second subplot - Velocity Magnitude
