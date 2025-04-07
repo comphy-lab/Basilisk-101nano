@@ -1,6 +1,6 @@
 /**
-#  Planar Couette flow of Newtonian Fluid
-# Code
+# Planar Couette flow of Newtonian Fluid
+## Code
 */
 #include "navier-stokes/centered.h"
 
@@ -12,21 +12,21 @@ int max_iter = 1e4;        // Maximum iterations
 #define DT_MAX (1e-3)      // Maximum timestep
 
 /**
- * @brief Entry point for the planar Couette flow simulation.
- *
- * Initializes the simulation by setting up the computational grid and domain, defining
- * simulation parameters (including timestep, convergence tolerance, and a Newtonian fluid's
- * viscosity configuration with a base viscosity μ₀ of 1.0), and applying the boundary conditions.
- * The boundaries are set as periodic on the right and left, slip (Neumann conditions) at the top,
- * no-slip (Dirichlet conditions) at the bottom, and zero-gradient for pressure at the top and bottom.
- * The simulation output is written to the file "results".
- *
- * @param argc Unused.
- * @param argv Unused.
- * @return int Returns 0 upon successful completion.
- */
-int main(int argc, char const *argv[])
-{
+## Entry point for the planar Couette flow simulation.
+
+Initializes the simulation by setting up the computational grid and domain, defining
+simulation parameters (including timestep, convergence tolerance, and a Newtonian fluid's
+viscosity configuration with a base viscosity μ₀ of 1.0), and applying the boundary conditions.
+The boundaries are set as periodic on the right and left, slip (Neumann conditions) at the top,
+no-slip (Dirichlet conditions) at the bottom, and zero-gradient for pressure at the top and bottom.
+The simulation output is written to the file "results".
+
+@param argc Unused.
+@param argv Unused.
+@return int Returns 0 upon successful completion.
+*/
+
+int main(int argc, char const *argv[]) {
   
   sprintf(file_name, "results");
   
@@ -112,11 +112,11 @@ event logfile(i += 500; i <= max_iter) {
 }
 
 /**
- * @brief Updates the face viscosity for a generalized Newtonian fluid.
- *
- * This event handler is executed at each simulation iteration. It computes the viscosity at each
- * grid face by scaling the base viscosity (mu_0) with the face metric (fm.x[]) and stores the
- * resulting value in the corresponding position of the face vector (muv.x[]).
+## Updates the face viscosity for a generalized Newtonian fluid.
+
+This event handler is executed at each simulation iteration. It computes the viscosity at each
+grid face by scaling the base viscosity (mu_0) with the face metric (fm.x[]) and stores the
+resulting value in the corresponding position of the face vector (muv.x[]).
  */
 event properties(i++) {
   foreach_face() {
