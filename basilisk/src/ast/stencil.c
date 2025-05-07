@@ -218,8 +218,9 @@ void ast_cleanup (Ast * n, Stack * stack, Ast * scope, bool init_declarator)
     if (n->sym != sym_argument_expression_list)
       ast_erase (n);
     else {
-      Ast * function_call = ast_parent (n, sym_function_call);      
-      if (!is_point_function_call (function_call) &&
+      Ast * function_call = ast_parent (n, sym_function_call);
+      if (function_call &&
+	  !is_point_function_call (function_call) &&
 	  is_field_access (function_call, stack))
 	ast_set_child (n, 0, NN (n, sym_argument_expression_list_item,
 				 o_stencil (function_call)));

@@ -1057,8 +1057,12 @@ void stencil_val (Point p, scalar s, int i, int j, int k,
     exit (1);
   }
   int index[] = {i, j, k};
-  for (int d = 0; d < dimension; d++)
-    index[d] += (&p.i)[d];      
+  for (int d = 0; d < dimension; d++) {
+    if (index[d] == o_stencil)
+      index[d] = 2;
+    else
+      index[d] += (&p.i)[d];
+  }
   bool central = true;
   for (int d = 0; d < dimension; d++) {
     if (!overflow && (index[d] > 2 || index[d] < - 2)) {
