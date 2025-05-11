@@ -214,6 +214,7 @@ coordinate system. */
 macro translate (float x = 0, float y = 0., float z = 0.)
 {
   {
+    redraw (clear = false);
     bview * _view = draw();
     glMatrixMode (GL_MODELVIEW);
     glPushMatrix();
@@ -239,6 +240,7 @@ $\alpha$ as explained in
 macro mirror (coord n = {0}, double alpha = 0.)
 {
   {
+    redraw (clear = false);
     bview * _view = draw();
     {
       glMatrixMode (GL_MODELVIEW);

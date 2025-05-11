@@ -207,14 +207,15 @@ event init (i = 0)
   boundaries. Without these the Coriolis acceleration seems to be
   "less balanced" on these boundaries. */
   
-  foreach_dimension() {
-    u.t[right] = dirichlet(0);
-    u.t[left] = dirichlet(0);
-    zb[right] = 1000;
-    zb[left] = 1000;
-    h[right] = 0;
-    h[left] = 0;
-  }      
+  foreach_dimension()
+    if (!Period.x) {
+      u.t[right] = dirichlet(0);
+      u.t[left] = dirichlet(0);
+      zb[right] = 1000;
+      zb[left] = 1000;
+      h[right] = 0;
+      h[left] = 0;
+    }
 }
 
 /**
@@ -449,12 +450,14 @@ event outputs (t += day)
 
   char name[80];
   sprintf (name, "u%d", nl - 1);
-  vorticity (lookup_vector (name), nu);
-
-  output_ppm (nu, mask = m, file = "omega.mp4", n = clamp(N,1024,2048),
-	      linear = false,
-	      //	      spread = 5,
-	      min = -0.5e-4, max = 0.5e-4, box = BOX, map = blue_white_red);
+  vector utop = lookup_vector (name);
+  if (utop.x.i >= 0) {
+    vorticity (utop, nu);
+    output_ppm (nu, mask = m, file = "omega.mp4", n = clamp(N,1024,2048),
+		linear = false,
+		//	      spread = 5,
+		min = -0.5e-4, max = 0.5e-4, box = BOX, map = blue_white_red);
+  }
 }
 
 /**
@@ -515,10 +518,14 @@ post-processing and/or to restart the simulation. */
 
 event snapshots (t += month)
 {
+  scalar omega[];
   char name[80];
   sprintf (name, "u%d", nl - 1);
-  scalar omega[];
-  vorticity (lookup_vector (name), omega);
+  vector utop = lookup_vector (name);
+  if (utop.x.i >= 0)
+    vorticity (utop, omega);
+  else
+    reset ({omega}, 0);
   dump (zero = false);
 }
 

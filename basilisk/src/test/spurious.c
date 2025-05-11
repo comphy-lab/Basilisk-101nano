@@ -166,13 +166,6 @@ event error (t = end) {
 	   ekmax);
 }
 
-#if 0
-event gfsview (i += 10) {
-  static FILE * fp = popen ("gfsview2D spurious.gfv", "w");
-  output_gfs (fp);
-}
-#endif
-
 /**
 We use an adaptive mesh with a constant (maximum) resolution along the
 interface. */

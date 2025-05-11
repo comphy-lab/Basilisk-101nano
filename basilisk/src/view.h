@@ -243,7 +243,7 @@ bview * get_view() {
 /**
 The main drawing function. */
 
-static void redraw() {
+static void redraw (bool clear = true) {
   bview * view = get_view();
     
   /* OpenGL somehow generates floating-point exceptions... turn them off */
@@ -282,9 +282,11 @@ static void redraw() {
   
   glScalef (view->sx/L0, view->sy/L0, view->sz/L0);
 
-  glClearColor (view->bg[0], view->bg[1], view->bg[2], 0.);
-  glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-
+  if (clear) {
+    glClearColor (view->bg[0], view->bg[1], view->bg[2], 0.);
+    glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+  }
+    
   gl_get_frustum (&view->frustum);
   
   view->active = true;

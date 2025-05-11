@@ -1,6 +1,6 @@
 all: check 3D-tests mpi-tests load-balancing curvature-tests	\
 	axi-tests cadna-tests embed-tests multilayer-tests	\
-	multilayer-stratified gotm-tests dimensions-tests
+	multilayer-stratified gotm-tests dimensions-tests gpu-tests
 
 failed:
 	$(MAKE) -k `find . -name fail | sed -e 's|\./||g' -e 's|/fail|.tst|g'`

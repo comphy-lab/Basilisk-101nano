@@ -89,7 +89,7 @@ statustest()
 If you also intend to generate graphics etc... on the server, do
 
 ~~~bash
-sudo apt install gnuplot gnuplot-nox imagemagick ffmpeg graphviz valgrind gifsicle
+sudo apt install gnuplot gnuplot-nox imagemagick ffmpeg graphviz valgrind gifsicle libnetcdff-dev
 ~~~
 
 ## Creating the untrusted user

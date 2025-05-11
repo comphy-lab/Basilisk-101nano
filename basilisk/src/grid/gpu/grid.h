@@ -255,10 +255,9 @@ priority" these are:
   OK.
 * Double precision (64-bits floats) is supported by Basilisk (use
   `CFLAGS='-DDOUBLE_PRECISION'`) but depends on the (often limited)
-  support by graphics cards and their drivers (see also
-  [performance](#performance)). Note also that using single precision
-  can have an important impact on the convergence and accuracy of
-  [multigrid solvers](/src/poisson.h).
+  support by graphics cards and their drivers. Note also that using
+  single precision can have an important impact on the convergence and
+  accuracy of [multigrid solvers](/src/poisson.h).
 
 ## Performance
 
@@ -282,10 +281,6 @@ To maximize performance, here are a few tips and observations:
 * Use [built-in profiling](/src/README.trace) to check where time is
   spent. Use the `-DTRACE=3` compilation flag to get profiling
   information at the level of foreach loops.
-* While double precision (64-bits floats i.e. `double`) is supported
-  by GLSL, graphics cards and their drivers can have very poor support
-  and the performances of standard "gamers" graphics cards [are usually
-  terrible](https://www.reddit.com/r/CUDA/comments/lkhcbv/is_there_a_list_of_gpus_ranked_by_fp64/).
 
 ## Bugs
 
@@ -925,7 +920,7 @@ char * build_shader (External * externals, const ForeachData * loop,
 			 "const uint N = ", s, ", _depth = ", d, ";\n");
 	if (GPUContext.nssbo == 1) {
 	  char size[30];
-	  snprintf (size, 19, "%ld", (size_t) field_size());	  
+	  snprintf (size, 29, "%ld", (size_t) field_size());	  
 	  fs = str_append (fs,
 			   "const uint _field_size = ", size, ";\n");
 	}

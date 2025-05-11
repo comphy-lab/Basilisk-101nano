@@ -425,7 +425,7 @@ int _stencil_nop;
 
 typedef void _stencil_undefined;
 
-@define o_stencil -2
+@define o_stencil -3
 
 /**
 ## See also

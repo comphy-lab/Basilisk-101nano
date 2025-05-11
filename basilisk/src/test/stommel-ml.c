@@ -296,7 +296,7 @@ event logfile (i += 10; t <= 200)
 {
   double du = change (u.y, un);
 
-#if _GPU
+#if _GPU && SHOW
   scalar psi[], psim[];
   streamfunctions (psi, psim);
   output_ppm (psi, fp = NULL, fps = 30, n = 512, spread = -1);

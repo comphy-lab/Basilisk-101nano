@@ -195,7 +195,7 @@ Note that only the documented test cases appear in the list below
 
 ## GPU tests
 
-These tests need to be run manually using:
+These tests can be run manually using:
 
 ~~~bash
 make -k gpu-tests
