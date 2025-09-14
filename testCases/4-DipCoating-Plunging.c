@@ -1,12 +1,12 @@
 /**
 
-@file 4-DipCoating-Withdrawal.c
-@brief Simulation of dip coating withdrawal - Landau-Levich problem
+@file 4-DipCoating-Plunging.c
+@brief Simulation of dip coating plunging - inverted Landau-Levich problem
 
-This code simulates the classical Landau-Levich dip coating process where
-a vertical plate is withdrawn from a liquid bath at constant velocity.
-The simulation captures the formation of the liquid film on the plate
-and the meniscus dynamics.
+This code simulates the dip coating plunging process where
+a vertical plate is plunged into a liquid bath at constant velocity.
+The simulation captures the formation of the meniscus as the plate
+enters the bath and the dynamic wetting behavior.
 
 Problem scales: 
  - Length: L = l_c = \sqrt{\sigma/\rho g}
@@ -22,8 +22,9 @@ Physical parameters:
  
 Key physics:
  - Contact line dynamics at the three-phase contact line
- - Meniscus formation and shape
- - Steady-state film formation
+ - Meniscus formation as plate enters the bath
+ - Dynamic wetting and contact angle evolution
+ - Flow patterns around the advancing meniscus
 
 
 @author Vatsal Sanjay (vatsal.sanjay@comphy-lab.org)
@@ -59,8 +60,8 @@ double tmax, Ca, Rho21, Mu21, Ldomain;
 #define tsnap (0.1)             // Time interval for snapshot outputs
 
 // ======= Boundary conditions =======
-// Left boundary: moving plate with withdrawal velocity
-u.t[left] = dirichlet(-Ca);      // Tangential velocity = withdrawal velocity
+// Left boundary: moving plate with plunging velocity
+u.t[left] = dirichlet(-Ca);      // Tangential velocity = plunging velocity (downward)
 u.n[left] = dirichlet(0.0);         // Normal velocity = 0 (no-slip)
 f[left] = neumann(0.0);           // No-flux for volume fraction (90 degree contact angle)
 
@@ -120,7 +121,7 @@ event init(t = 0){
 
     // Set initial velocity field
     foreach () {
-      u.x[] = 0.0;     // Liquid moves with plate initially
+      u.x[] = 0.0;               // No initial x-velocity
       u.y[] = 0.0;               // No initial y-velocity
     }
 
@@ -178,7 +179,7 @@ event logWriting(i += 10) {
   foreach (reduction(+:ke) reduction(+:vol_liquid) reduction(max:max_height)){
     ke += 0.5*rho(f[])*(sq(u.x[]) + sq(u.y[]))*sq(Delta);
     vol_liquid += f[]*sq(Delta);
-    if (f[] > 0.5 && x < 0.2) {  // Track maximum height near the plate
+    if (f[] > 0.5 && x < 0.2) {  // Track interface position near the plate
       max_height = max(max_height, y);
     }
   }
