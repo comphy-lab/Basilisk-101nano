@@ -1,6 +1,6 @@
 /* Title: Getting Facets
 # Author: Vatsal Sanjay
-# vatsalsy@comphy-lab.org
+# vatsal.sanjay@comphy-lab.org
 # CoMPhy Lab
 # Physics of Fluids Department
 # Last updated: Mar 8, 2025
