@@ -1,11 +1,11 @@
 # Basilisk-101nano: Hands-On CFD Simulations Using Basilisk C
 
-[![Issues](https://img.shields.io/github/issues/comphy-lab/Basilisk-101)](https://github.com/comphy-lab/Basilisk-101/issues)
-[![License](https://img.shields.io/github/license/comphy-lab/Basilisk-101)](https://github.com/comphy-lab/Basilisk-101/blob/main/LICENSE)
-[![Last Commit](https://img.shields.io/github/last-commit/comphy-lab/Basilisk-101)](https://github.com/comphy-lab/Basilisk-101/commits/main)
+[![Issues](https://img.shields.io/github/issues/comphy-lab/Basilisk-101nano)](https://github.com/comphy-lab/Basilisk-101nano/issues)
+[![License](https://img.shields.io/github/license/comphy-lab/Basilisk-101nano)](https://github.com/comphy-lab/Basilisk-101nano/blob/main/LICENSE)
+[![Last Commit](https://img.shields.io/github/last-commit/comphy-lab/Basilisk-101nano)](https://github.com/comphy-lab/Basilisk-101nano/commits/main)
 [![Course](https://img.shields.io/badge/Course-Nano%20Version-blue)](https://comphy-lab.org/teaching/)
 [![Basilisk](https://img.shields.io/badge/Basilisk-Compatible-green)](http://basilisk.fr/)
-![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/comphy-lab/Basilisk-101?utm_source=oss&utm_medium=github&utm_campaign=comphy-lab%2FBasilisk-101&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/comphy-lab/Basilisk-101nano?utm_source=oss&utm_medium=github&utm_campaign=comphy-lab%2FBasilisk-101nano&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 
 **A compact, hands-on introduction to Basilisk C for computational fluid dynamics**
 
@@ -161,7 +161,7 @@ The script will create a `.project_config` file in your project root with the ne
 
 ### Windows Subsystem for Linux (WSL) Compatibility
 
-Testing on WSL is currently incomplete. In principle, the Linux installation instructions should work for WSL environments. If you encounter any issues while installing or running Basilisk on WSL, please report them by [opening a bug report](https://github.com/comphy-lab/Basilisk-101/issues/new?template=bug_report.md&labels=bug,wsl).
+Testing on WSL is currently incomplete. In principle, the Linux installation instructions should work for WSL environments. If you encounter any issues while installing or running Basilisk on WSL, please report them by [opening a bug report](https://github.com/comphy-lab/Basilisk-101nano/issues/new?template=bug_report.md&labels=bug,wsl).
 
 ### Complete Installation Instructions
 
@@ -181,7 +181,7 @@ We use GitHub Issues to track bugs, feature requests, and example requests for t
 ### Issue Templates
 
 #### Bug Report:
-[Report here](https://github.com/comphy-lab/Basilisk-101/issues/new?template=bug_report.md)
+[Report here](https://github.com/comphy-lab/Basilisk-101nano/issues/new?template=bug_report.md)
 
 - For problems with installation, compilation, or running code. 
 Please include:
@@ -193,7 +193,7 @@ Please include:
 - Code snippets or files that demonstrate the issue
 
 #### Feature/Topic Request:
-[Report here](https://github.com/comphy-lab/Basilisk-101/issues/new?template=feature_request.md)
+[Report here](https://github.com/comphy-lab/Basilisk-101nano/issues/new?template=feature_request.md)
 - For requesting specific topics or functionality
 - Coverage of specific topics in the course
 - New examples or tutorials
@@ -201,20 +201,20 @@ Please include:
 - Improvements to existing materials
 
 #### Example Request:
-[Report here](https://github.com/comphy-lab/Basilisk-101/issues/new?template=example_request.md)
+[Report here](https://github.com/comphy-lab/Basilisk-101nano/issues/new?template=example_request.md)
 - For requesting specific examples that demonstrate:
 - Particular Basilisk features
 - Solutions to common problems
 - Implementation of specific physics or numerical methods
 
 #### General Question:
-[Report here](https://github.com/comphy-lab/Basilisk-101/issues/new?template=general_question.md)
+[Report here](https://github.com/comphy-lab/Basilisk-101nano/issues/new?template=general_question.md)
 - For any other questions
 
 ### How to Create an Issue
 
-1. Go to the ["Issues" tab](https://github.com/comphy-lab/Basilisk-101/issues) in the GitHub repository
-2. Click the ["New Issue"](https://github.com/comphy-lab/Basilisk-101/issues/new/choose) button
+1. Go to the ["Issues" tab](https://github.com/comphy-lab/Basilisk-101nano/issues) in the GitHub repository
+2. Click the ["New Issue"](https://github.com/comphy-lab/Basilisk-101nano/issues/new/choose) button
 3. Select the appropriate template from the options
 4. Fill in the required information according to the template
 5. Add relevant labels if available
