@@ -9,17 +9,25 @@
 
 **A compact, hands-on introduction to Basilisk C for computational fluid dynamics**
 
-This is the **nano version** of the Basilisk-101 course - a fast-tracked, 3-hour intensive workshop focused on practical implementation rather than lectures. Perfect for researchers who want to quickly get up and running with adaptive mesh CFD simulations.
+This is the **nano version** of the Basilisk-101 course - a fast-tracked, 3-hour intensive
+workshop focused on practical implementation rather than lectures. Perfect for researchers
+who want to quickly get up and running with adaptive mesh CFD simulations.
 
 ## Course Description
 
-This **3-hour intensive workshop** provides a hands-on introduction to computational fluid dynamics using Basilisk C. Unlike traditional lecture-heavy courses, this nano version emphasizes **learning by doing** - you'll spend most of your time coding, running simulations, and exploring physics in real-time.
+This **3-hour intensive workshop** provides a hands-on introduction to computational fluid
+dynamics using Basilisk C. Unlike traditional lecture-heavy courses, this nano version
+emphasizes **learning by doing** - you'll spend most of your time coding, running
+simulations, and exploring physics in real-time.
 
 ### What You'll Learn
 
-- **Hour 1: Foundations** - Think before you compute! Basic transport equations and your first Basilisk simulation
-- **Hour 2: Interface Dynamics** - Volume-of-Fluid methods and drop impact physics with live parameter variations
-- **Hour 3: Coating Applications** - Contact line dynamics and Landau-Levich dip coating with immediate visual feedback
+- **Hour 1: Foundations** - Think before you compute! Basic transport equations and your
+first Basilisk simulation
+- **Hour 2: Interface Dynamics** - Volume-of-Fluid methods and drop impact physics with
+live parameter variations
+- **Hour 3: Coating Applications** - Contact line dynamics and Landau-Levich dip coating
+with immediate visual feedback
 
 ### Key Features
 
@@ -38,7 +46,8 @@ This **3-hour intensive workshop** provides a hands-on introduction to computati
   - Laptop with C compiler capability
 - **Materials**: All code examples and exercises included in this repository
 
-Perfect for researchers, graduate students, and engineers who want to quickly start using adaptive mesh CFD for their own projects.
+Perfect for researchers, graduate students, and engineers who want to quickly start using
+adaptive mesh CFD for their own projects.
 
 ## Repository Structure
 
