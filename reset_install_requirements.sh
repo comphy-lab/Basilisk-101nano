@@ -9,6 +9,79 @@ if [[ "$1" == "--hard" ]]; then
     HARD_RESET=true
 fi
 
+# Function to check prerequisites
+check_prerequisites() {
+    local missing_tools=()
+    local found_tools=()
+
+    echo "Checking prerequisites..."
+    echo ""
+
+    # Check for make
+    if ! command -v make > /dev/null 2>&1; then
+        missing_tools+=("make")
+    else
+        found_tools+=("make")
+        echo "\033[0;32m✓ make is installed\033[0m"
+    fi
+
+    # Check for darcs
+    if ! command -v darcs > /dev/null 2>&1; then
+        missing_tools+=("darcs")
+    else
+        found_tools+=("darcs")
+        echo "\033[0;32m✓ darcs is installed\033[0m"
+    fi
+
+    echo ""
+
+    if [[ ${#missing_tools[@]} -gt 0 ]]; then
+        echo "\033[0;31mError: Missing required tools: ${missing_tools[*]}\033[0m"
+        echo ""
+
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            # macOS installation instructions
+            for tool in "${missing_tools[@]}"; do
+                case "$tool" in
+                    "make")
+                        echo "To install make:"
+                        echo "  xcode-select --install"
+                        echo ""
+                        ;;
+                    "darcs")
+                        echo "To install darcs:"
+                        echo "  brew install darcs"
+                        echo ""
+                        ;;
+                esac
+            done
+        else
+            # Linux installation instructions
+            for tool in "${missing_tools[@]}"; do
+                case "$tool" in
+                    "make")
+                        echo "To install make on Linux:"
+                        echo "  Ubuntu/Debian: sudo apt-get install build-essential"
+                        echo "  RHEL/CentOS: sudo yum groupinstall 'Development Tools'"
+                        echo ""
+                        ;;
+                    "darcs")
+                        echo "To install darcs:"
+                        echo "  Visit https://darcs.net/ for installation instructions"
+                        echo ""
+                        ;;
+                esac
+            done
+        fi
+
+        echo "Please install the missing tools and try again."
+        exit 1
+    else
+        echo "\033[0;32m✅ All prerequisites are satisfied!\033[0m"
+        echo ""
+    fi
+}
+
 # Function to install basilisk
 install_basilisk() {
     darcs clone http://basilisk.fr/basilisk
@@ -24,6 +97,9 @@ install_basilisk() {
     make -k
     make
 }
+
+# Check prerequisites first
+check_prerequisites
 
 # Remove project config always
 rm -rf .project_config

@@ -69,7 +69,7 @@
  * the retraction dynamics. Try De = 0 (Newtonian), De = 1 (moderate elasticity),
  * and De = 10 (high elasticity).
  */
-#define FILTERED                           // Smear density and viscosity jumps for stability
+#define FILTERED 1                         // Smear density and viscosity jumps for stability
 #include "two-phaseVE.h"                   // Two-phase flow with viscoelasticity
 #include "navier-stokes/conserving.h"      // Conservative form of N-S for better mass conservation
 #include "tension.h"                       // Surface tension implementation

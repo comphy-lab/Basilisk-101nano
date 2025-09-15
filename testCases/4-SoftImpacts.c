@@ -65,7 +65,7 @@
  * Try changing fErr to see how it affects the interface resolution and
  * computational cost. Smaller values give sharper interfaces but require more cells.
  */
-#define FILTERED                           // Smear density and viscosity jumps for stability
+#define FILTERED 1                         // Smear density and viscosity jumps for stability
 #include "two-phaseVE.h"                   // Two-phase flow with viscoelasticity
 #include "navier-stokes/conserving.h"      // Conservative form of N-S for better mass conservation
 #include "tension.h"                       // Surface tension implementation

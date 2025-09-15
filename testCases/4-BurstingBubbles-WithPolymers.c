@@ -87,7 +87,7 @@
  * - **AErr**: Error tolerance for conformation tensor (1e-3)
  * - **Ldomain**: Domain size in characteristic lengths (8)
  */
-#define FILTERED                           // Smear density and viscosity jumps for stability
+#define FILTERED 1                         // Smear density and viscosity jumps for stability
 #include "two-phaseVE.h"                   // Two-phase flow with viscoelasticity
 #include "navier-stokes/conserving.h"      // Conservative form of N-S for better mass conservation
 #include "tension.h"                       // Surface tension implementation

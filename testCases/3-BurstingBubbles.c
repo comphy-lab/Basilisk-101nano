@@ -69,7 +69,7 @@ Parameters can be adjusted in the code or passed via command line:
 
 Key numerical parameters controlling simulation accuracy and stability:
 */
-#define FILTERED                      // Smear density and viscosity jumps for stability
+#define FILTERED 1                    // Smear density and viscosity jumps for stability
 #include "two-phase.h"                // Two-phase flow solver
 #include "navier-stokes/conserving.h" // Conservative momentum advection
 #include "tension.h"                  // Surface tension forces

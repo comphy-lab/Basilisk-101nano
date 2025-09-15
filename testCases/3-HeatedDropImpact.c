@@ -79,7 +79,7 @@ To run this simulation: `CFLAGS=-DDISPLAY=-1 make 3-HeatedDropImpact.tst`
 // ======= Include necessary Basilisk modules =======
 #include "axi.h"                // Axisymmetric coordinates
 #include "navier-stokes/centered.h"  // NS solver with centered discretization
-#define FILTERED                // Use filtered VOF advection
+#define FILTERED 1              // Use filtered VOF advection
 #include "two-phase-thermal.h"  // Two-phase flow with heat transfer
 #include "navier-stokes/conserving.h"  // Conservative momentum advection
 #include "tension.h"            // Surface tension model

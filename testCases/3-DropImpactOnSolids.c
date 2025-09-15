@@ -22,7 +22,7 @@
 // ======= Include necessary Basilisk modules =======
 #include "axi.h"                // Axisymmetric coordinates
 #include "navier-stokes/centered.h"  // NS solver with centered discretization
-#define FILTERED                // Use filtered VOF advection
+#define FILTERED 1              // Use filtered VOF advection
 #include "two-phase.h"          // Two-phase interface tracking
 #include "navier-stokes/conserving.h"  // Conservative momentum advection
 #include "tension.h"            // Surface tension model
@@ -180,6 +180,7 @@ event writingFiles(t = 0, t += tsnap; t <= tmax) {
   char nameOut[80];
   sprintf(nameOut, "intermediate/snapshot-%5.4f", t);
   dump(file = nameOut);
+  output_ppm (f, linear = true, spread = 2, file = "f.mp4", n = 200);
 }
 
 // ======= Log simulation data =======

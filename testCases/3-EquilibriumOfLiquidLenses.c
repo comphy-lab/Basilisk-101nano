@@ -73,7 +73,7 @@ To run this simulation: `CFLAGS=-DDISPLAY=-1 make 3-EquilibriumOfLiquidLenses.ts
 // Core libraries for simulation
 #include "axi.h"                                               // Axisymmetric coordinates
 #include "navier-stokes/centered.h"                           // Centered finite-volume Navier-Stokes solver
-#define FILTERED                                             // Enable property filtering for stability
+#define FILTERED 1                                           // Enable property filtering for stability
 #include "three-phase.h"                                     // Three-phase interface tracking
 #include "tension.h"                                         // Surface tension model
 
