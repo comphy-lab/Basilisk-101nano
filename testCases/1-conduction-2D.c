@@ -121,6 +121,7 @@ event writingFiles (t = 0.0; t += tsnap; t < tmax+tsnap) {
   dump (file = dumpFile);
   sprintf (nameOut, "intermediate/snapshot-%5.4f", t);
   dump(file=nameOut);
+  output_ppm (T, linear = true, spread = 10, file = "T.mp4", n = 200);
 }
 
 /**

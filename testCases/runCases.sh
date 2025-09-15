@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ../.project_config
+
 # Save the original directory
 ORIG_DIR=$(pwd)
 
