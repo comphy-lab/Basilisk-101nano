@@ -33,6 +33,14 @@ check_prerequisites() {
         echo "\033[0;32m✓ darcs is installed\033[0m"
     fi
 
+    # Check for gcc
+    if ! command -v gcc > /dev/null 2>&1; then
+        missing_tools+=("gcc")
+    else
+        found_tools+=("gcc")
+        echo "\033[0;32m✓ gcc is installed\033[0m"
+    fi
+
     echo ""
 
     if [[ ${#missing_tools[@]} -gt 0 ]]; then
@@ -53,6 +61,11 @@ check_prerequisites() {
                         echo "  brew install darcs"
                         echo ""
                         ;;
+                    "gcc")
+                        echo "To install gcc:"
+                        echo "  xcode-select --install"
+                        echo ""
+                        ;;
                 esac
             done
         else
@@ -68,6 +81,12 @@ check_prerequisites() {
                     "darcs")
                         echo "To install darcs:"
                         echo "  Visit https://darcs.net/ for installation instructions"
+                        echo ""
+                        ;;
+                    "gcc")
+                        echo "To install gcc on Linux:"
+                        echo "  Ubuntu/Debian: sudo apt-get install build-essential"
+                        echo "  RHEL/CentOS: sudo yum groupinstall 'Development Tools'"
                         echo ""
                         ;;
                 esac
