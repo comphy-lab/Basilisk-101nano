@@ -436,7 +436,7 @@ FILE * open_image (const char * file, const char * options)
 
     int len = strlen ("ppm2???    ") + strlen (file) +
       (options ? strlen (options) : 0);
-    char command[len];
+    char command[len + 1];
     strcpy (command, "ppm2"); strcat (command, ext + 1);
 
     static int has_ffmpeg = -1;

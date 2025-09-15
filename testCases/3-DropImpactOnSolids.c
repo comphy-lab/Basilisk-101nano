@@ -11,7 +11,7 @@
  * - Ohnesorge numbers (Ohd, Ohs): Viscous vs inertial and surface tension forces
  * - Bond number (Bo): Gravitational vs surface tension forces
  * 
- * @author Vatsal Sanjay (vatsalsy@comphy-lab.org)
+ * @author Vatsal Sanjay (vatsal.sanjay@comphy-lab.org)
  * https://comphy-lab.org
  * @date 2025-03-11
  * @version 1.0 

@@ -1,47 +1,103 @@
-# Basilisk-101: High-Fidelity Simulations Using Basilisk C
+# Basilisk-101nano: Hands-On CFD Simulations Using Basilisk C
 
-[![Issues](https://img.shields.io/github/issues/comphy-lab/Basilisk-101)](https://github.com/comphy-lab/Basilisk-101/issues)
-[![License](https://img.shields.io/github/license/comphy-lab/Basilisk-101)](https://github.com/comphy-lab/Basilisk-101/blob/main/LICENSE)
-[![Last Commit](https://img.shields.io/github/last-commit/comphy-lab/Basilisk-101)](https://github.com/comphy-lab/Basilisk-101/commits/main)
-[![Course](https://img.shields.io/badge/Course-March%202025-blue)](https://comphy-lab.org/teaching/2025-Basilisk101-Madrid)
+[![Issues](https://img.shields.io/github/issues/comphy-lab/Basilisk-101nano)](https://github.com/comphy-lab/Basilisk-101nano/issues)
+[![License](https://img.shields.io/github/license/comphy-lab/Basilisk-101nano)](https://github.com/comphy-lab/Basilisk-101nano/blob/main/LICENSE)
+[![Last Commit](https://img.shields.io/github/last-commit/comphy-lab/Basilisk-101nano)](https://github.com/comphy-lab/Basilisk-101nano/commits/main)
+[![Course](https://img.shields.io/badge/Course-Nano%20Version-blue)](https://comphy-lab.org/teaching/)
 [![Basilisk](https://img.shields.io/badge/Basilisk-Compatible-green)](http://basilisk.fr/)
-![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/comphy-lab/Basilisk-101?utm_source=oss&utm_medium=github&utm_campaign=comphy-lab%2FBasilisk-101&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/comphy-lab/Basilisk-101nano?utm_source=oss&utm_medium=github&utm_campaign=comphy-lab%2FBasilisk-101nano&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 
-Repository for the Basilisk C course at Universidad Carlos III de Madrid (March 10-13, 2025).
+**A compact, hands-on introduction to Basilisk C for computational fluid dynamics**
+
+This is the **nano version** of the Basilisk-101 course - a fast-tracked, 3-hour intensive
+workshop focused on practical implementation rather than lectures. Perfect for researchers
+who want to quickly get up and running with adaptive mesh CFD simulations.
 
 ## Course Description
 
-This intensive course provides a comprehensive introduction to high-fidelity simulations using Basilisk C, a powerful computational framework for fluid dynamics. Participants will learn to implement and solve complex fluid mechanics problems with an emphasis on multiphase flows, interface dynamics, and non-Newtonian rheology.
+This **3-hour intensive workshop** provides a hands-on introduction to computational fluid
+dynamics using Basilisk C. Unlike traditional lecture-heavy courses, this nano version
+emphasizes **learning by doing** - you'll spend most of your time coding, running
+simulations, and exploring physics in real-time.
 
 ### What You'll Learn
 
-- **Think before you compute!** Understanding the physics before implementation
-- **Writing the first code in Basilisk C** Getting comfortable with the framework
-- **Solving conservation equations** Numerical approaches to fluid dynamics
-- **Interface tracking methods** Capturing multiphase phenomena accurately
-- **Non-Newtonian flows** Modeling complex rheological behaviors
+- **Hour 1: Foundations** - Think before you compute! Basic transport equations and your
+first Basilisk simulation
+- **Hour 2: Interface Dynamics** - Volume-of-Fluid methods and drop impact physics with
+live parameter variations
+- **Hour 3: Coating Applications** - Contact line dynamics and Landau-Levich dip coating
+with immediate visual feedback
 
-### Course Details
+### Key Features
 
-- **Dates**: March 10-13, 2025
-- **Location**: Universidad Carlos III de Madrid, Spain
-- **Duration**: 4 days, full-time
+- **Hands-on focused**: 80% coding, 20% theory
+- **Interactive exploration**: Modify parameters and see immediate results
+- **Physics-first approach**: Understanding the physics before numerical implementation
+- **Production-ready code**: Learn with actual research-grade simulations
+
+### Course Format
+
+- **Duration**: 3 hours intensive
+- **Format**: Workshop-style with live coding
 - **Prerequisites**:
-  - Basic knowledge of fluid mechanics
-  - Experience with programming (any language, C preferred)
-  - Understanding of partial differential equations
-  - Laptop with ability to compile C code
+  - Basic fluid mechanics knowledge
+  - Some programming experience (any language)
+  - Laptop with C compiler capability
+- **Materials**: All code examples and exercises included in this repository
 
-For complete course schedule and registration information, visit: [Course Website](https://comphy-lab.org/teaching/2025-Basilisk101-Madrid)
+Perfect for researchers, graduate students, and engineers who want to quickly start using
+adaptive mesh CFD for their own projects.
 
 ## Repository Structure
 
 ```
-├-- basilisk/src/: Core Basilisk CFD library (reference only)
-├── postProcess/: Project-specific post-processing tools
+├── basilisk/src/: Core Basilisk CFD library (reference only)
+├── postProcess/: Post-processing tools for visualization
 ├── src-local/: Custom header files extending Basilisk functionality
-├── testCases/: Test cases with their own Makefile
+├── testCases/: Workshop exercises and examples
+    ├── 1-*: Foundations - Transport equations & basic CFD
+    ├── 2-*: Flow dynamics - Navier-Stokes applications
+    ├── 3-DropImpactOnSolids.c: Interface dynamics workshop
+    ├── 4-DipCoating-Withdrawal.c: Landau-Levich coating physics
+    └── 4-DipCoating-Plunging.c: Contact line dynamics
 ```
+
+### Key Workshop Files
+
+The nano course focuses on these essential examples:
+
+- **Hour 1**: `1-conduction-*.c` - Foundation physics and Basilisk syntax
+- **Hour 2**: `3-DropImpactOnSolids.c` - Volume-of-Fluid and adaptive mesh refinement
+- **Hour 3**: `4-DipCoating-*.c` - Industrial coating applications with contact line physics
+
+Each file is fully commented and designed for live parameter exploration during the workshop.
+
+## Quick Start (For Workshop Participants)
+
+If you're attending a nano workshop, follow these streamlined steps:
+
+1. **Clone this repository**:
+   ```bash
+   git clone https://github.com/comphy-lab/Basilisk-101nano.git
+   cd Basilisk-101nano
+   ```
+
+2. **Quick Basilisk setup**:
+   ```bash
+   ./reset_install_requirements.sh
+   source .project_config
+   ```
+
+3. **Test your installation**:
+   ```bash
+   cd testCases
+   CFLAGS=-DDISPLAY=-1 make 1-conduction-simple.tst
+   ```
+
+4. **Ready to code!** Your instructor will guide you through the examples.
+
+For detailed installation instructions or troubleshooting, see the full installation section below.
 
 ## Installation
 
@@ -114,7 +170,7 @@ The script will create a `.project_config` file in your project root with the ne
 
 ### Windows Subsystem for Linux (WSL) Compatibility
 
-Testing on WSL is currently incomplete. In principle, the Linux installation instructions should work for WSL environments. If you encounter any issues while installing or running Basilisk on WSL, please report them by [opening a bug report](https://github.com/comphy-lab/Basilisk-101/issues/new?template=bug_report.md&labels=bug,wsl).
+Testing on WSL is currently incomplete. In principle, the Linux installation instructions should work for WSL environments. If you encounter any issues while installing or running Basilisk on WSL, please report them by [opening a bug report](https://github.com/comphy-lab/Basilisk-101nano/issues/new?template=bug_report.md&labels=bug,wsl).
 
 ### Complete Installation Instructions
 
@@ -134,7 +190,7 @@ We use GitHub Issues to track bugs, feature requests, and example requests for t
 ### Issue Templates
 
 #### Bug Report:
-[Report here](https://github.com/comphy-lab/Basilisk-101/issues/new?template=bug_report.md)
+[Report here](https://github.com/comphy-lab/Basilisk-101nano/issues/new?template=bug_report.md)
 
 - For problems with installation, compilation, or running code. 
 Please include:
@@ -146,7 +202,7 @@ Please include:
 - Code snippets or files that demonstrate the issue
 
 #### Feature/Topic Request:
-[Report here](https://github.com/comphy-lab/Basilisk-101/issues/new?template=feature_request.md)
+[Report here](https://github.com/comphy-lab/Basilisk-101nano/issues/new?template=feature_request.md)
 - For requesting specific topics or functionality
 - Coverage of specific topics in the course
 - New examples or tutorials
@@ -154,20 +210,20 @@ Please include:
 - Improvements to existing materials
 
 #### Example Request:
-[Report here](https://github.com/comphy-lab/Basilisk-101/issues/new?template=example_request.md)
+[Report here](https://github.com/comphy-lab/Basilisk-101nano/issues/new?template=example_request.md)
 - For requesting specific examples that demonstrate:
 - Particular Basilisk features
 - Solutions to common problems
 - Implementation of specific physics or numerical methods
 
 #### General Question:
-[Report here](https://github.com/comphy-lab/Basilisk-101/issues/new?template=general_question.md)
+[Report here](https://github.com/comphy-lab/Basilisk-101nano/issues/new?template=general_question.md)
 - For any other questions
 
 ### How to Create an Issue
 
-1. Go to the ["Issues" tab](https://github.com/comphy-lab/Basilisk-101/issues) in the GitHub repository
-2. Click the ["New Issue"](https://github.com/comphy-lab/Basilisk-101/issues/new/choose) button
+1. Go to the ["Issues" tab](https://github.com/comphy-lab/Basilisk-101nano/issues) in the GitHub repository
+2. Click the ["New Issue"](https://github.com/comphy-lab/Basilisk-101nano/issues/new/choose) button
 3. Select the appropriate template from the options
 4. Fill in the required information according to the template
 5. Add relevant labels if available

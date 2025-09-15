@@ -1,0 +1,2 @@
+export BASILISK=/Users/vatsal/Documents/1-Areas/Teaching/BasiliskCourse/Basilisk-101nano/basilisk/src
+export PATH=$PATH:$BASILISK
