@@ -36,7 +36,7 @@
 
 #include "axi.h"
 #include "navier-stokes/centered.h"
-#define FILTERED // Smear density and viscosity jumps
+#define FILTERED 1 // Smear density and viscosity jumps
 /**
 To model Viscoplastic liquids, we use a modified version of [two-phase.h](http://basilisk.fr/src/two-phase.h). [two-phaseVP-HB.h](../src-local/two-phaseVP-HB.h) contains these modifications.
 */
