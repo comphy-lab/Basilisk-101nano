@@ -401,12 +401,14 @@ event end (t = end) {
  */
 event logWriting (i++) {
   // Calculate total kinetic energy in the domain
-  double ke = 0.;
+  double ke = 0., vcm = 0., wt = 0.;
   foreach (reduction(+:ke)){
     // For axisymmetric coordinates, include 2πy factor for volume element
     ke += (2*pi*y)*(0.5*rho(f[])*(sq(u.x[]) + sq(u.y[])))*sq(Delta);
+    vcm += (2*pi*y)*f[]*u.x[]*sq(Delta);
+    wt += (2*pi*y)*f[]*sq(Delta); 
   }
-  
+  vcm /= wt; // vcm = vcm/wt; i++ => i = i+1; i += 2; i = i+2;   
   // Write log information (only on main process in parallel runs)
   if (pid() == 0) {
     static FILE * fp;
@@ -418,13 +420,13 @@ event logWriting (i++) {
       fp = fopen ("log", "w");
       fprintf(fp, "Level %d, Wi %2.1e, El %2.1e, Oh %2.1e, Oha %2.1e, Bo %4.3f\n", 
               MAXlevel, Wi, El, Oh, Oha, Bond);
-      fprintf (fp, "i dt t ke\n");
-      fprintf (fp, "%d %g %g %g\n", i, dt, t, ke);
+      fprintf (fp, "i dt t ke vcm\n");
+      fprintf (fp, "%d %g %g %g %g\n", i, dt, t, ke, vcm);
       fclose(fp);
     } else {
       // Append data in subsequent timesteps
       fp = fopen ("log", "a");
-      fprintf (fp, "%d %g %g %g\n", i, dt, t, ke);
+      fprintf (fp, "%d %g %g %g %g\n", i, dt, t, ke, vcm);
       fclose(fp);
     }
     fprintf (ferr, "%d %g %g %g\n", i, dt, t, ke);
